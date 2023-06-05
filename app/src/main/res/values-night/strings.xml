@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="atachiz02_softwares">Atachiz02 Softwares</string>
+    <string name="blood_donor">Blood Donor</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="log_in">Log In</string>
+    <string name="appicon">appIcon</string>
+    <string name="confirm_password">Confirm password</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="registered">Already registered? Click here to Log In...</string>
+</resources>

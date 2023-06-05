@@ -1,20 +1,103 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="10dp"
-    android:background="@color/white"
+    android:id="@+id/signup"
     tools:context=".Activities.SignUpActivity">
 
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/signupProfilePic"
+        android:layout_width="250dp"
+        android:layout_height="250dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="30dp"
+        android:src="@drawable/avatar"
+        app:civ_border_color="@color/red"
+        app:civ_border_width="1dp" />
+
     <EditText
-        android:id="@+id/name"
+        android:id="@+id/signupEmail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Name"
+        android:layout_below="@+id/signupProfilePic"
+        android:layout_marginTop="30dp"
+        android:autofillHints="emailAddress"
+        android:background="@drawable/textbox_outline"
         android:textSize="24sp"
-        android:layout_margin="20dp"
-        />
+        android:hint="@string/email"
+        android:inputType="textEmailAddress"
+        android:padding="10dp" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <EditText
+        android:id="@+id/password"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/signupEmail"
+        android:layout_marginTop="10dp"
+        android:autofillHints="password"
+        android:background="@drawable/textbox_outline"
+        android:hint="@string/password"
+        android:inputType="textPassword"
+        android:padding="10dp"
+        android:textSize="24sp" />
+
+    <EditText
+        android:id="@+id/signupConfirmPassword"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/password"
+        android:layout_marginTop="10dp"
+        android:autofillHints="password"
+        android:background="@drawable/textbox_outline"
+        android:hint="@string/confirm_password"
+        android:inputType="textPassword"
+        android:padding="10dp"
+        android:textSize="24sp" />
+
+    <Button
+        android:id="@+id/signupSignUp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/signupConfirmPassword"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
+        android:backgroundTint="@color/red"
+        android:text="@string/sign_up"
+        android:textSize="24sp" />
+
+    <TextView
+        android:id="@+id/signupLogIn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/signupSignUp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        android:text="@string/registered"
+        android:textColor="#888888"
+        android:textSize="14sp"
+        android:textStyle="italic" />
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/signupGoogle"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_below="@+id/signupLogIn"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
+        android:elevation="10dp"
+        android:src="@drawable/google" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:text="@string/atachiz02_softwares"
+        android:textColor="#FF3D00"
+        android:textSize="14sp"
+        android:textStyle="italic" />
+
+</RelativeLayout>
