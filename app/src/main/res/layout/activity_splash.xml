@@ -19,6 +19,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/icon"
+        android:layout_marginTop="100dp"
         android:layout_centerHorizontal="true"
         android:text="@string/blood_donor"
         android:textColor="#B40300"

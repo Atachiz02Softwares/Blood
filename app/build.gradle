@@ -1,5 +1,6 @@
 plugins {
     id 'com.android.application'
+    id 'com.google.gms.google-services'
 }
 
 android {
@@ -44,6 +45,7 @@ dependencies {
 
     implementation 'de.hdodenhof:circleimageview:3.1.0'
     implementation 'com.github.bumptech.glide:glide:4.14.2'
+    implementation 'com.google.firebase:firebase-auth-ktx:22.0.0'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.14.2'
 
     testImplementation 'junit:junit:4.13.2'

@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="10dp"
+    android:id="@+id/login"
     tools:context=".Activities.LogInActivity">
 
     <ImageView
@@ -52,11 +53,20 @@
         android:padding="10dp"
         android:textSize="24sp" />
 
+    <ProgressBar
+        android:id="@+id/loginProgressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/loginPassword"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        android:visibility="gone" />
+
     <Button
         android:id="@+id/loginLogin"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/loginPassword"
+        android:layout_below="@id/loginProgressBar"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="20dp"
         android:backgroundTint="@color/red"
