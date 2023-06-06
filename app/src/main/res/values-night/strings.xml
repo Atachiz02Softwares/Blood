@@ -1,5 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="app_name">Blood</string>
+    <string name="title_activity_login">LoginActivity</string>
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Password</string>
+    <string name="action_sign_in">Sign in or register</string>
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="welcome">"Welcome !"</string>
+    <string name="invalid_username">Not a valid username</string>
+    <string name="invalid_password">Password must be >5 characters</string>
+    <string name="login_failed">"Login failed"</string>
     <string name="atachiz02_softwares">Atachiz02 Softwares</string>
     <string name="blood_donor">Blood Donor</string>
     <string name="email">Email</string>
@@ -8,5 +18,14 @@
     <string name="appicon">appIcon</string>
     <string name="confirm_password">Confirm password</string>
     <string name="sign_up">Sign Up</string>
-    <string name="registered">Already registered? Click here to Log In...</string>
+    <string name="registered">Already registered? Click here to Log In…</string>
+    <string name="home">Home</string>
+    <string name="search">Search…</string>
+    <string name="todo">TODO</string>
+    <string name="create_profile">Create Profile</string>
+    <string name="be_a_donor">Be a Donor</string>
+    <string name="find_donors">Find a Donor</string>
+    <string name="exit">exit</string>
+    <string name="open">open</string>
+    <string name="close">close</string>
 </resources>

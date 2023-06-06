@@ -1,18 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.drawerlayout.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mainDrawer"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/main"
     tools:context=".Activities.MainActivity">
 
-    <ImageView
-        android:id="@+id/loginIcon"
-        android:layout_width="176dp"
-        android:layout_height="200dp"
-        android:layout_centerInParent="true"
-        android:layout_marginTop="20dp"
-        android:contentDescription="@string/appicon"
-        android:src="@drawable/icon" />
+    <include
+        layout="@layout/wrapper_main"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 
-</RelativeLayout>
+    <com.google.android.material.navigation.NavigationView
+        android:id="@+id/mainNavigator"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:theme="@style/NavigationViewStyle"
+        app:headerLayout="@layout/navigation_header"
+        app:itemIconSize="30dp"
+        app:menu="@menu/navigation_menu" />
+
+</androidx.drawerlayout.widget.DrawerLayout>

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/createProfile"
+        android:icon="@drawable/baseline_account_circle_24"
+        android:title="@string/create_profile" />
+    <item
+        android:id="@+id/beADonor"
+        android:icon="@drawable/baseline_bloodtype_24"
+        android:title="@string/be_a_donor" />
+    <item
+        android:id="@+id/findDonor"
+        android:icon="@drawable/baseline_search_24"
+        android:title="@string/find_donors" />
+    <group>
+        <item android:title="">
+            <menu>
+                <item
+                    android:id="@+id/exit"
+                    android:icon="@drawable/round_exit_to_app_24"
+                    android:title="@string/exit"
+                    android:titleCondensed="" />
+            </menu>
+        </item>
+    </group>
+</menu>
