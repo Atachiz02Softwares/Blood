@@ -33,13 +33,17 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        toolbar = findViewById(R.id.homeToolbar);
         search = findViewById(R.id.homeSearchView);
         drawerLayout = findViewById(R.id.mainDrawer);
         navigationView = findViewById(R.id.mainNavigator);
         actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar,
                 R.string.open, R.string.close);
+
         drawerLayout.addDrawerListener(actionBarDrawerToggle);
-        toolbar = findViewById(R.id.homeToolbar);
+        actionBarDrawerToggle.setDrawerSlideAnimationEnabled(true);
+        actionBarDrawerToggle.syncState();
+        setSupportActionBar(toolbar);
 
         mAuth = FirebaseAuth.getInstance();
         user = mAuth.getCurrentUser();
@@ -62,24 +66,13 @@ public class MainActivity extends AppCompatActivity {
 
         navigationView.setNavigationItemSelectedListener(item -> {
             if (item.getItemId() == R.id.createProfile)
-                Toast.makeText(MainActivity.this, "Create profile", Toast.LENGTH_LONG).show();
+                startActivity(new Intent(MainActivity.this, CreateProfileActivity.class));
             else if (item.getItemId() == R.id.beADonor)
-                Toast.makeText(MainActivity.this, "Be a donor", Toast.LENGTH_LONG).show();
+                Toast.makeText(MainActivity.this, "Be a donor", Toast.LENGTH_SHORT).show();
             else if (item.getItemId() == R.id.findDonor)
-                Toast.makeText(MainActivity.this, "Find a donor", Toast.LENGTH_LONG).show();
+                Toast.makeText(MainActivity.this, "Find a donor", Toast.LENGTH_SHORT).show();
             else if (item.getItemId() == R.id.exit) finishAffinity();
 
-//            switch (item.getItemId()) {
-//                case R.id.createProfile ->
-//                        Toast.makeText(MainActivity.this, "Create profile", Toast.LENGTH_LONG).show();
-//                case R.id.beADonor ->
-//                        Toast.makeText(MainActivity.this, "Be a donor", Toast.LENGTH_LONG).show();
-//                case R.id.findDonor ->
-//                        Toast.makeText(MainActivity.this, "Find a donor", Toast.LENGTH_LONG).show();
-//                case R.id.exit -> finishAffinity();
-//                default -> {
-//                }
-//            }
             drawerLayout.closeDrawer(GravityCompat.START);
             return false;
         });

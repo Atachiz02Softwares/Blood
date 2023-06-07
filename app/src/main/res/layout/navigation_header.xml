@@ -9,7 +9,7 @@
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/navProfilePic"
-        android:layout_width="120dp"
+        android:layout_width="100dp"
         android:layout_height="150dp"
         android:src="@drawable/avatar"
         app:civ_border_color="@color/red"
@@ -23,7 +23,7 @@
         android:layout_marginTop="20dp"
         android:layout_toEndOf="@id/navProfilePic"
         android:text="Sylvanus Sylvia"
-        android:textSize="30sp"
+        android:textSize="20sp"
         android:textStyle="bold" />
 
     <TextView
@@ -35,7 +35,7 @@
         android:layout_marginTop="5dp"
         android:layout_toEndOf="@id/navProfilePic"
         android:text="12 Nana Hostel, MAU"
-        android:textSize="20sp"
+        android:textSize="14sp"
         android:textStyle="italic" />
 
     <TextView
@@ -47,7 +47,7 @@
         android:layout_marginTop="10dp"
         android:layout_toEndOf="@id/navProfilePic"
         android:text="900101"
-        android:textSize="18sp" />
+        android:textSize="12sp" />
 
     <TextView
         android:id="@+id/nav"

@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/createProfile"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="10dp"
+    tools:context=".Activities.CreateProfileActivity">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/createProfileProfilePic"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="20dp"
+        android:src="@drawable/avatar"
+        app:civ_border_color="@color/red"
+        app:civ_border_width="1dp" />
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/createProfileCardView"
+        android:layout_width="match_parent"
+        android:layout_height="380dp"
+        android:layout_below="@id/createProfileProfilePic"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="10dp"
+        app:cardCornerRadius="10dp"
+        app:cardElevation="5dp">
+
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="10dp">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <EditText
+                    android:id="@+id/createProfileName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:autofillHints="name"
+                    android:background="@drawable/textbox_outline"
+                    android:hint="@string/your_name"
+                    android:inputType="text"
+                    android:padding="10dp"
+                    android:textSize="24sp" />
+
+                <EditText
+                    android:id="@+id/createProfileAddress"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/createProfileName"
+                    android:layout_marginTop="10dp"
+                    android:autofillHints="postalAddress"
+                    android:background="@drawable/textbox_outline"
+                    android:hint="Your address"
+                    android:inputType="textMultiLine"
+                    android:padding="10dp"
+                    android:textSize="24sp" />
+
+                <EditText
+                    android:id="@+id/createProfileCountry"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/createProfileAddress"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/textbox_outline"
+                    android:hint="Nationality"
+                    android:inputType="text"
+                    android:padding="10dp"
+                    android:textSize="24sp" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/Role"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/createProfileCountry"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/textbox_outline"
+                    android:hint="Donor/Receipient/Blood bank?">
+
+                    <AutoCompleteTextView
+                        android:id="@+id/createProfileRole"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:inputType="none" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/BloodGroup"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/Role"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/textbox_outline"
+                    android:hint="Your blood group">
+
+                    <AutoCompleteTextView
+                        android:id="@+id/createProfileBloodGroup"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:inputType="none" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/Genotype"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/BloodGroup"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/textbox_outline"
+                    android:hint="Your genotype">
+
+                    <AutoCompleteTextView
+                        android:id="@+id/createProfileGenotype"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:inputType="none" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <RadioGroup
+                    android:id="@+id/createProfileGender"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/Genotype"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="10dp"
+                    android:orientation="horizontal">
+
+                    <RadioButton
+                        android:id="@+id/createProfileMale"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="25dp"
+                        android:buttonTint="@color/red"
+                        android:text="@string/male"
+                        android:textColor="@color/red"
+                        android:textSize="24sp" />
+
+                    <RadioButton
+                        android:id="@+id/createProfileFemale"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="25dp"
+                        android:buttonTint="@color/red"
+                        android:text="@string/female"
+                        android:textColor="@color/red"
+                        android:textSize="24sp" />
+                </RadioGroup>
+            </RelativeLayout>
+        </androidx.core.widget.NestedScrollView>
+    </androidx.cardview.widget.CardView>
+
+    <ProgressBar
+        android:id="@+id/createProfileProgressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/createProfileCardView"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        android:visibility="gone" />
+
+    <Button
+        android:id="@+id/createProfileCreateProfile"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:backgroundTint="@color/red"
+        android:text="@string/create"
+        android:textSize="24sp" />
+</RelativeLayout>

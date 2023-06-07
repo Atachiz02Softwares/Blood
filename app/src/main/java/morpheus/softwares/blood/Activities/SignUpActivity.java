@@ -63,25 +63,26 @@ public class SignUpActivity extends AppCompatActivity {
 
             if ((!mail.isEmpty()) && (!pass.isEmpty()) && (!cPass.isEmpty())) {
                 if (pass.equals(cPass)) {
-                    mAuth.createUserWithEmailAndPassword(mail, pass)
-                            .addOnCompleteListener(task -> {
-                                progressBar.setVisibility(View.GONE);
-                                if (task.isSuccessful()) {
-                                    Toast.makeText(SignUpActivity.this, "Account created!",
-                                            Toast.LENGTH_LONG).show();
-                                    startActivity(new Intent(SignUpActivity.this, LogInActivity.class));
-                                    finish();
-                                } else {
-                                    // If sign in fails, display a message to the user.
-                                    Toast.makeText(SignUpActivity.this, "Authentication failed.",
-                                            Toast.LENGTH_LONG).show();
-                                }
-                            });
-
-                    Toast.makeText(SignUpActivity.this, "Sign Up successful!", Toast.LENGTH_LONG).show();
+                    if (pass.length() > 5)
+                        mAuth.createUserWithEmailAndPassword(mail, pass)
+                                .addOnCompleteListener(task -> {
+                                    progressBar.setVisibility(View.GONE);
+                                    if (task.isSuccessful()) {
+                                        Toast.makeText(SignUpActivity.this, "Sign Up successful!", Toast.LENGTH_LONG).show();
+                                        startActivity(new Intent(SignUpActivity.this, LogInActivity.class));
+                                        finish();
+                                    } else {
+                                        // If sign in fails, display a message to the user.
+                                        Toast.makeText(SignUpActivity.this, "Authentication failed.",
+                                                Toast.LENGTH_LONG).show();
+                                    }
+                                });
+                    else
+                        Snackbar.make(findViewById(R.id.signup), "Password must be more than 6 " +
+                                "characters...", Snackbar.LENGTH_LONG).show();
                 } else {
-                    password.setError("Password and Confirm password did not match!");
-                    confirmPassword.setError("Confirm password and Password did not match!");
+                    password.setError("Passwords don't match!");
+                    confirmPassword.setError("Passwords don't match!");
                 }
             } else {
                 Snackbar.make(findViewById(R.id.signup), "No field should be empty...",
