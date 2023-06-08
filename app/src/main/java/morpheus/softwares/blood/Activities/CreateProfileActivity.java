@@ -1,16 +1,21 @@
 package morpheus.softwares.blood.Activities;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.google.firebase.auth.FirebaseAuth;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import morpheus.softwares.blood.Models.Links;
@@ -23,15 +28,16 @@ public class CreateProfileActivity extends AppCompatActivity {
     private final String[] ROLES = new Links().getRoles();
     CircleImageView profilePic;
     Uri profilePicture;
-    RadioGroup genderGroup;
-    RadioButton male, female;
-
+    EditText name, address, nationality, postCode, phoneNumber;
+    AutoCompleteTextView roles;
+    ArrayAdapter<String> roleAdapter;
     AutoCompleteTextView bloodGroups;
     ArrayAdapter<String> bloodGroupsAdapter;
     AutoCompleteTextView genotypes;
     ArrayAdapter<String> genotypesAdapter;
-    AutoCompleteTextView roles;
-    ArrayAdapter<String> roleAdapter;
+    RadioGroup genderGroup;
+    RadioButton male, female;
+    ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,18 +45,23 @@ public class CreateProfileActivity extends AppCompatActivity {
         setContentView(R.layout.activity_create_profile);
 
         profilePic = findViewById(R.id.createProfileProfilePic);
+        name = findViewById(R.id.createProfileName);
+        address = findViewById(R.id.createProfileAddress);
+        nationality = findViewById(R.id.createProfileCountry);
+        postCode = findViewById(R.id.createProfilePostCode);
+        phoneNumber = findViewById(R.id.createProfilePhone);
         genderGroup = findViewById(R.id.createProfileGender);
         roles = findViewById(R.id.createProfileRole);
         bloodGroups = findViewById(R.id.createProfileBloodGroup);
         genotypes = findViewById(R.id.createProfileGenotype);
         male = findViewById(R.id.createProfileMale);
         female = findViewById(R.id.createProfileFemale);
+        progressBar = findViewById(R.id.createProfileProgressBar);
 
         profilePic.setOnClickListener(v -> {
             Intent intent = new Intent().setAction(Intent.ACTION_GET_CONTENT).setType("image/*");
             startActivityForResult(intent, REQUEST_CODE);
         });
-
 
         roleAdapter = new ArrayAdapter<>(this, R.layout.list_items, ROLES);
         roles.setAdapter(roleAdapter);

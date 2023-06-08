@@ -13,7 +13,10 @@
         android:layout_width="200dp"
         android:layout_height="200dp"
         android:layout_centerHorizontal="true"
-        android:layout_margin="20dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="20dp"
         android:src="@drawable/avatar"
         app:civ_border_color="@color/red"
         app:civ_border_width="1dp" />
@@ -21,13 +24,13 @@
     <androidx.cardview.widget.CardView
         android:id="@+id/createProfileCardView"
         android:layout_width="match_parent"
-        android:layout_height="380dp"
+        android:layout_height="400dp"
         android:layout_below="@id/createProfileProfilePic"
         android:layout_marginStart="10dp"
         android:layout_marginEnd="10dp"
         android:layout_marginBottom="10dp"
-        app:cardCornerRadius="10dp"
-        app:cardElevation="5dp">
+        app:cardCornerRadius="30dp"
+        app:cardElevation="2dp">
 
         <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
@@ -74,12 +77,38 @@
                     android:padding="10dp"
                     android:textSize="24sp" />
 
+                <EditText
+                    android:id="@+id/createProfilePostCode"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/createProfileCountry"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/textbox_outline"
+                    android:hint="Postal code"
+                    android:inputType="number"
+                    android:maxLength="10"
+                    android:padding="10dp"
+                    android:textSize="24sp" />
+
+                <EditText
+                    android:id="@+id/createProfilePhone"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/createProfilePostCode"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/textbox_outline"
+                    android:hint="Phone number"
+                    android:inputType="number"
+                    android:maxLength="11"
+                    android:padding="10dp"
+                    android:textSize="24sp" />
+
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/Role"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/createProfileCountry"
+                    android:layout_below="@+id/createProfilePhone"
                     android:layout_marginTop="10dp"
                     android:background="@drawable/textbox_outline"
                     android:hint="Donor/Receipient/Blood bank?">
