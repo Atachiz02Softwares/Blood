@@ -14,14 +14,12 @@ import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-import de.hdodenhof.circleimageview.CircleImageView;
 import morpheus.softwares.blood.R;
 
 public class LogInActivity extends AppCompatActivity {
     TextView email, password;
     ProgressBar progressBar;
     Button logIn;
-    CircleImageView google;
 
     FirebaseAuth mAuth;
 
@@ -37,7 +35,6 @@ public class LogInActivity extends AppCompatActivity {
         password = findViewById(R.id.loginPassword);
         progressBar = findViewById(R.id.loginProgressBar);
         logIn = findViewById(R.id.loginLogin);
-        google = findViewById(R.id.loginGoogle);
 
         logIn.setOnClickListener(v -> {
             progressBar.setVisibility(View.VISIBLE);
@@ -67,10 +64,6 @@ public class LogInActivity extends AppCompatActivity {
                 Snackbar.make(findViewById(R.id.login), "No field should be empty...",
                         Snackbar.LENGTH_LONG).show();
             }
-        });
-
-        google.setOnClickListener(v -> {
-
         });
     }
 

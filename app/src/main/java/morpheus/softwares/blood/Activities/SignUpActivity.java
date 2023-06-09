@@ -12,17 +12,15 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.android.gms.auth.api.identity.BeginSignInRequest;
-import com.google.android.gms.auth.api.identity.SignInClient;
-import com.google.android.gms.auth.api.identity.SignInCredential;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.snackbar.Snackbar;
-import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.auth.GoogleAuthProvider;
-
-import java.util.Objects;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import morpheus.softwares.blood.R;
@@ -30,7 +28,7 @@ import morpheus.softwares.blood.R;
 public class SignUpActivity extends AppCompatActivity {
     // Declare variables
     private static final int REQUEST_CODE = 10;
-    private static final int REQ_ONE_TAP = 30;
+    private static final int GOOGLE_REQUEST_CODE = 30;
     Uri profilePicture;
     CircleImageView profilePic;
     TextView email, password, confirmPassword, login;
@@ -38,10 +36,8 @@ public class SignUpActivity extends AppCompatActivity {
     Button signUp;
     CircleImageView google;
     FirebaseAuth mAuth;
-    FirebaseUser mUser;
-    SignInClient oneTapClient;
-    BeginSignInRequest signInRequest;
-    private boolean showOneTapUI = true;
+    GoogleSignInOptions signInOptions;
+    GoogleSignInClient signInClient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +46,8 @@ public class SignUpActivity extends AppCompatActivity {
 
         // Returns an instance of this class corresponding to the default FirebaseApp instance.
         mAuth = FirebaseAuth.getInstance();
+        signInOptions = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build();
+        signInClient = GoogleSignIn.getClient(SignUpActivity.this, signInOptions);
 
         // Initialize variables
         profilePic = findViewById(R.id.signupProfilePic);
@@ -103,23 +101,14 @@ public class SignUpActivity extends AppCompatActivity {
         });
 
         login.setOnClickListener(v -> {
-            startActivity(new Intent(SignUpActivity.this, LogInActivity.class));
             finish();
+            startActivity(new Intent(SignUpActivity.this, LogInActivity.class));
         });
-
-        signInRequest = BeginSignInRequest.builder()
-                .setGoogleIdTokenRequestOptions(BeginSignInRequest.GoogleIdTokenRequestOptions.builder()
-                        .setSupported(true)
-                        // Your server's client ID, not your Android client ID.
-                        .setServerClientId(getString(R.string.default_web_client_id))
-                        // Only show accounts previously used to sign in.
-                        .setFilterByAuthorizedAccounts(true)
-                        .build())
-                .build();
 
 
         google.setOnClickListener(v -> {
-
+            Intent intent = signInClient.getSignInIntent();
+            startActivityForResult(intent, GOOGLE_REQUEST_CODE);
         });
     }
 
@@ -134,62 +123,20 @@ public class SignUpActivity extends AppCompatActivity {
             }
         }
 
-        if (requestCode == REQ_ONE_TAP) {
+        if (requestCode == GOOGLE_REQUEST_CODE) {
+            progressBar.setVisibility(View.VISIBLE);
+            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
             try {
-                SignInCredential credential = oneTapClient.getSignInCredentialFromIntent(data);
-                String idToken = credential.getGoogleIdToken();
-                if (idToken != null) {
-                    // Got an ID token from Google. Use it to authenticate
-                    // with Firebase.
-                    Snackbar.make(findViewById(R.id.signup), "Got ID token.",
-                            Snackbar.LENGTH_LONG).show();
-                }
+                task.getResult(ApiException.class);
+                progressBar.setVisibility(View.GONE);
+                finish();
+                startActivity(new Intent(SignUpActivity.this, MainActivity.class));
             } catch (ApiException e) {
                 progressBar.setVisibility(View.GONE);
-                Snackbar.make(findViewById(R.id.signup), Objects.requireNonNull(e.getMessage()),
-                        Snackbar.LENGTH_LONG).show();
-                finish();
+                Toast.makeText(SignUpActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                throw new RuntimeException(e);
             }
-        } else {
-            throw new IllegalStateException("Unexpected value: " + requestCode);
         }
-
-        SignInCredential googleCredential;
-        try {
-            googleCredential = oneTapClient.getSignInCredentialFromIntent(data);
-        } catch (ApiException e) {
-            throw new RuntimeException(e);
-        }
-
-        String idToken = googleCredential.getGoogleIdToken();
-        if (idToken != null) {
-            // Got an ID token from Google. Use it to authenticate
-            // with Firebase.
-            AuthCredential firebaseCredential = GoogleAuthProvider.getCredential(idToken, null);
-            mAuth.signInWithCredential(firebaseCredential)
-                    .addOnCompleteListener(this, task -> {
-                        if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
-                            progressBar.setVisibility(View.GONE);
-                            Toast.makeText(SignUpActivity.this, "Signed up successfully!",
-                                    Toast.LENGTH_SHORT).show();
-                            FirebaseUser user = mAuth.getCurrentUser();
-                            updateUI(user);
-                        } else {
-                            // If sign in fails, display a message to the user.
-                            Toast.makeText(SignUpActivity.this, "Sign up failed!",
-                                    Toast.LENGTH_SHORT).show();
-                            progressBar.setVisibility(View.GONE);
-                            finish();
-                        }
-                    });
-        }
-    }
-
-    private void updateUI(FirebaseUser user) {
-        Intent intent = new Intent(SignUpActivity.this, MainActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-        startActivity(intent);
     }
 
     @Override
@@ -199,6 +146,12 @@ public class SignUpActivity extends AppCompatActivity {
         // If user is already signed in, jump to the MainActivity
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if (currentUser != null) {
+            startActivity(new Intent(SignUpActivity.this, MainActivity.class));
+            finishAffinity();
+        }
+
+        GoogleSignInAccount signInAccount = GoogleSignIn.getLastSignedInAccount(SignUpActivity.this);
+        if (signInAccount != null) {
             startActivity(new Intent(SignUpActivity.this, MainActivity.class));
             finishAffinity();
         }

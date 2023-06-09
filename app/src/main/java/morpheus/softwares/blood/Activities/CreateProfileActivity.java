@@ -1,6 +1,5 @@
 package morpheus.softwares.blood.Activities;
 
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -10,12 +9,9 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-
-import com.google.firebase.auth.FirebaseAuth;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import morpheus.softwares.blood.Models.Links;
@@ -58,6 +54,9 @@ public class CreateProfileActivity extends AppCompatActivity {
         female = findViewById(R.id.createProfileFemale);
         progressBar = findViewById(R.id.createProfileProgressBar);
 
+//        String man = String.valueOf(male.getText());
+//        String woman = String.valueOf(female.getText());
+
         profilePic.setOnClickListener(v -> {
             Intent intent = new Intent().setAction(Intent.ACTION_GET_CONTENT).setType("image/*");
             startActivityForResult(intent, REQUEST_CODE);
@@ -71,16 +70,6 @@ public class CreateProfileActivity extends AppCompatActivity {
 
         genotypesAdapter = new ArrayAdapter<>(this, R.layout.list_items, GENOTYPES);
         genotypes.setAdapter(genotypesAdapter);
-
-        genderGroup.setOnCheckedChangeListener((group, checkedId) -> {
-            if (checkedId == R.id.createProfileMale) {
-                Toast.makeText(CreateProfileActivity.this,
-                        male.getText() + " selected...", Toast.LENGTH_SHORT).show();
-            } else if (checkedId == R.id.createProfileFemale) {
-                Toast.makeText(CreateProfileActivity.this,
-                        female.getText() + " selected...", Toast.LENGTH_SHORT).show();
-            }
-        });
     }
 
     @Override

@@ -60,7 +60,7 @@
                     android:layout_marginTop="10dp"
                     android:autofillHints="postalAddress"
                     android:background="@drawable/textbox_outline"
-                    android:hint="Your address"
+                    android:hint="@string/your_address"
                     android:inputType="textMultiLine"
                     android:padding="10dp"
                     android:textSize="24sp" />
@@ -71,8 +71,9 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/createProfileAddress"
                     android:layout_marginTop="10dp"
+                    android:autofillHints="country"
                     android:background="@drawable/textbox_outline"
-                    android:hint="Nationality"
+                    android:hint="@string/nationality"
                     android:inputType="text"
                     android:padding="10dp"
                     android:textSize="24sp" />
@@ -83,8 +84,9 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/createProfileCountry"
                     android:layout_marginTop="10dp"
+                    android:autofillHints="postalCode"
                     android:background="@drawable/textbox_outline"
-                    android:hint="Postal code"
+                    android:hint="@string/postal_code"
                     android:inputType="number"
                     android:maxLength="10"
                     android:padding="10dp"
@@ -96,9 +98,10 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/createProfilePostCode"
                     android:layout_marginTop="10dp"
+                    android:autofillHints="phone"
                     android:background="@drawable/textbox_outline"
-                    android:hint="Phone number"
-                    android:inputType="number"
+                    android:hint="@string/phone_number"
+                    android:inputType="phone"
                     android:maxLength="11"
                     android:padding="10dp"
                     android:textSize="24sp" />
@@ -111,7 +114,7 @@
                     android:layout_below="@+id/createProfilePhone"
                     android:layout_marginTop="10dp"
                     android:background="@drawable/textbox_outline"
-                    android:hint="Donor/Receipient/Blood bank?">
+                    android:hint="@string/roles">
 
                     <AutoCompleteTextView
                         android:id="@+id/createProfileRole"
@@ -128,7 +131,7 @@
                     android:layout_below="@+id/Role"
                     android:layout_marginTop="10dp"
                     android:background="@drawable/textbox_outline"
-                    android:hint="Your blood group">
+                    android:hint="@string/blood_group">
 
                     <AutoCompleteTextView
                         android:id="@+id/createProfileBloodGroup"
@@ -145,7 +148,7 @@
                     android:layout_below="@+id/BloodGroup"
                     android:layout_marginTop="10dp"
                     android:background="@drawable/textbox_outline"
-                    android:hint="Your genotype">
+                    android:hint="@string/genotype">
 
                     <AutoCompleteTextView
                         android:id="@+id/createProfileGenotype"

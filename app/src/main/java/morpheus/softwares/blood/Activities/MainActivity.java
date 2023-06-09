@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -12,6 +13,8 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -19,12 +22,12 @@ import com.google.firebase.auth.FirebaseUser;
 import morpheus.softwares.blood.R;
 
 public class MainActivity extends AppCompatActivity {
+    TextView name, email, navigationName;
     EditText search;
     DrawerLayout drawerLayout;
     NavigationView navigationView;
     ActionBarDrawerToggle actionBarDrawerToggle;
     Toolbar toolbar;
-
     FirebaseAuth mAuth;
     FirebaseUser user;
 
@@ -33,6 +36,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        name = findViewById(R.id.homeName);
+        navigationName = findViewById(R.id.navName);
+        email = findViewById(R.id.homeEmail);
         toolbar = findViewById(R.id.homeToolbar);
         search = findViewById(R.id.homeSearchView);
         drawerLayout = findViewById(R.id.mainDrawer);
@@ -48,9 +54,23 @@ public class MainActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         user = mAuth.getCurrentUser();
 
-        if (user == null) {
-            startActivity(new Intent(MainActivity.this, LogInActivity.class));
-            finish();
+        GoogleSignInAccount signInAccount = GoogleSignIn.getLastSignedInAccount(MainActivity.this);
+        if (signInAccount != null) {
+            String userName = String.valueOf(signInAccount.getDisplayName()).trim();
+            String mail = String.valueOf(signInAccount.getEmail()).trim();
+            name.setText(userName);
+//            navigationName.setText(userName);
+            email.setText(mail);
+        }
+
+        user = mAuth.getCurrentUser();
+
+        if (user != null) {
+            String userName = String.valueOf(user.getDisplayName()).trim();
+            String mail = String.valueOf(user.getEmail()).trim();
+            name.setText(userName);
+//            navigationName.setText(userName);
+            email.setText(mail);
         }
 
         search.setOnEditorActionListener((v, actionId, event) -> {
@@ -78,14 +98,3 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 }
-
-//        icon.setOnClickListener(v -> {
-//            // Signs out the current user and clears it from the disk cache.
-//            FirebaseAuth.getInstance().signOut();
-//
-//            startActivity(new Intent(MainActivity.this, LogInActivity.class));
-//            finish();
-//
-//            Toast.makeText(MainActivity.this, "Sign out successful!",
-//                    Toast.LENGTH_LONG).show();
-//        });

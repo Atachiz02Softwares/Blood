@@ -40,6 +40,26 @@
                 android:layout_marginTop="70dp"
                 app:layout_collapseMode="parallax">
 
+                <TextView
+                    android:id="@+id/homeName"
+                    android:layout_width="250dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:gravity="end"
+                    android:textSize="24sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/homeEmail"
+                    android:layout_width="250dp"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/homeName"
+                    android:layout_margin="10dp"
+                    android:layout_marginStart="10dp"
+                    android:gravity="end"
+                    android:textSize="14sp"
+                    android:textStyle="italic|bold" />
+
                 <de.hdodenhof.circleimageview.CircleImageView
                     android:id="@+id/homeProfilePic"
                     android:layout_width="100dp"
