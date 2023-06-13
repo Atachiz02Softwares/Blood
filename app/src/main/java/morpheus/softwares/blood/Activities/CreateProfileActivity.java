@@ -1,20 +1,32 @@
 package morpheus.softwares.blood.Activities;
 
+import android.content.ContentResolver;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.view.View;
+import android.webkit.MimeTypeMap;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+
 import de.hdodenhof.circleimageview.CircleImageView;
 import morpheus.softwares.blood.Models.Links;
+import morpheus.softwares.blood.Models.User;
 import morpheus.softwares.blood.R;
 
 public class CreateProfileActivity extends AppCompatActivity {
@@ -22,9 +34,10 @@ public class CreateProfileActivity extends AppCompatActivity {
     private final String[] BLOODGROUPS = new Links().getBloodGroups();
     private final String[] GENOTYPES = new Links().getGenotypes();
     private final String[] ROLES = new Links().getRoles();
+    private User user;
     CircleImageView profilePic;
     Uri profilePicture;
-    EditText name, address, nationality, postCode, phoneNumber;
+    EditText name, address, state, nationality, postCode, phoneNumber;
     AutoCompleteTextView roles;
     ArrayAdapter<String> roleAdapter;
     AutoCompleteTextView bloodGroups;
@@ -34,6 +47,10 @@ public class CreateProfileActivity extends AppCompatActivity {
     RadioGroup genderGroup;
     RadioButton male, female;
     ProgressBar progressBar;
+    Button createProfile;
+
+    StorageReference storageReference;
+    DatabaseReference databaseReference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +60,7 @@ public class CreateProfileActivity extends AppCompatActivity {
         profilePic = findViewById(R.id.createProfileProfilePic);
         name = findViewById(R.id.createProfileName);
         address = findViewById(R.id.createProfileAddress);
+        state = findViewById(R.id.createProfileState);
         nationality = findViewById(R.id.createProfileCountry);
         postCode = findViewById(R.id.createProfilePostCode);
         phoneNumber = findViewById(R.id.createProfilePhone);
@@ -53,14 +71,7 @@ public class CreateProfileActivity extends AppCompatActivity {
         male = findViewById(R.id.createProfileMale);
         female = findViewById(R.id.createProfileFemale);
         progressBar = findViewById(R.id.createProfileProgressBar);
-
-//        String man = String.valueOf(male.getText());
-//        String woman = String.valueOf(female.getText());
-
-        profilePic.setOnClickListener(v -> {
-            Intent intent = new Intent().setAction(Intent.ACTION_GET_CONTENT).setType("image/*");
-            startActivityForResult(intent, REQUEST_CODE);
-        });
+        createProfile = findViewById(R.id.createProfileCreateProfile);
 
         roleAdapter = new ArrayAdapter<>(this, R.layout.list_items, ROLES);
         roles.setAdapter(roleAdapter);
@@ -70,6 +81,56 @@ public class CreateProfileActivity extends AppCompatActivity {
 
         genotypesAdapter = new ArrayAdapter<>(this, R.layout.list_items, GENOTYPES);
         genotypes.setAdapter(genotypesAdapter);
+
+        storageReference = FirebaseStorage.getInstance().getReference("Users/");
+        databaseReference = FirebaseDatabase.getInstance().getReference("Users");
+
+        String fullName = String.valueOf(name.getText()).trim();
+        String addr = String.valueOf(address.getText()).trim();
+        String st = String.valueOf(state.getText()).trim();
+        String nation = String.valueOf(nationality.getText()).trim();
+        int postalCode = Integer.parseInt(String.valueOf(postCode.getText()).trim());
+        int phone = Integer.parseInt(String.valueOf(phoneNumber.getText()).trim());
+        String man = String.valueOf(male.getText());
+        String woman = String.valueOf(female.getText());
+        String role = String.valueOf(roles.getText());
+        String bloodGroup = String.valueOf(bloodGroups.getText());
+        String genotype = String.valueOf(genotypes.getText());
+
+        profilePic.setOnClickListener(v -> {
+            Intent intent = new Intent().setAction(Intent.ACTION_GET_CONTENT).setType("image/*");
+            startActivityForResult(intent, REQUEST_CODE);
+        });
+
+        createProfile.setOnClickListener(v -> {
+            progressBar.setVisibility(View.VISIBLE);
+
+            if (profilePicture != null) {
+                StorageReference reference = storageReference.child(System.currentTimeMillis() +
+                        "." + getFileExtension(profilePicture));
+                reference.putFile(profilePicture)
+                        .addOnSuccessListener(taskSnapshot -> {
+//                            user = new User(name, TODO);
+
+                            Handler handler = new Handler();
+                            handler.postDelayed(() -> progressBar.setProgress(0), 5000); // 5 seconds post delay
+                            progressBar.setVisibility(View.GONE);
+                            Toast.makeText(CreateProfileActivity.this, "Profile created " +
+                                    "successfully!", Toast.LENGTH_LONG).show();
+                        }).addOnFailureListener(e -> {
+                            progressBar.setVisibility(View.GONE);
+                            Toast.makeText(CreateProfileActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                        }).addOnProgressListener(snapshot -> {
+                            double progress =
+                                    100.0 * snapshot.getBytesTransferred() / snapshot.getTotalByteCount();
+                            progressBar.setProgress((int) progress);
+                        });
+            } else {
+                progressBar.setVisibility(View.GONE);
+                Toast.makeText(CreateProfileActivity.this, "Please select a profile picture...",
+                        Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     @Override
@@ -82,5 +143,15 @@ public class CreateProfileActivity extends AppCompatActivity {
                 profilePic.setImageURI(profilePicture);
             }
         }
+    }
+
+    /**
+     * Returns the registered extension for the given Uri. Note that some Uri(s) map to
+     * multiple extensions. This call will return the most common extension for the given Uri.
+     */
+    private String getFileExtension(Uri uri) {
+        ContentResolver contentResolver = getContentResolver();
+        MimeTypeMap mimeTypeMap = MimeTypeMap.getSingleton();
+        return mimeTypeMap.getExtensionFromMimeType(contentResolver.getType(uri));
     }
 }

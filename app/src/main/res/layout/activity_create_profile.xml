@@ -66,10 +66,23 @@
                     android:textSize="24sp" />
 
                 <EditText
-                    android:id="@+id/createProfileCountry"
+                    android:id="@+id/createProfileState"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/createProfileAddress"
+                    android:layout_marginTop="10dp"
+                    android:autofillHints="country"
+                    android:background="@drawable/textbox_outline"
+                    android:hint="@string/state"
+                    android:inputType="text"
+                    android:padding="10dp"
+                    android:textSize="24sp" />
+
+                <EditText
+                    android:id="@+id/createProfileCountry"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/createProfileState"
                     android:layout_marginTop="10dp"
                     android:autofillHints="country"
                     android:background="@drawable/textbox_outline"
