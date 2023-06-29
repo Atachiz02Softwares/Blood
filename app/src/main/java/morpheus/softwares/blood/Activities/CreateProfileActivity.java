@@ -27,8 +27,6 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.StorageTask;
 
-import java.util.Objects;
-
 import de.hdodenhof.circleimageview.CircleImageView;
 import morpheus.softwares.blood.Models.Links;
 import morpheus.softwares.blood.Models.User;
@@ -139,6 +137,7 @@ public class CreateProfileActivity extends AppCompatActivity {
                                 progressBar.setVisibility(View.GONE);
                                 Toast.makeText(CreateProfileActivity.this, "Profile created " +
                                         "successfully!", Toast.LENGTH_LONG).show();
+                                createProfile.setEnabled(false);
                             }).addOnFailureListener(e -> {
                                 progressBar.setVisibility(View.GONE);
                                 Toast.makeText(CreateProfileActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
