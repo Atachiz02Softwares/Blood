@@ -27,6 +27,8 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.StorageTask;
 
+import java.util.Objects;
+
 import de.hdodenhof.circleimageview.CircleImageView;
 import morpheus.softwares.blood.Models.Links;
 import morpheus.softwares.blood.Models.User;
@@ -93,19 +95,6 @@ public class CreateProfileActivity extends AppCompatActivity {
         storageReference = FirebaseStorage.getInstance().getReference("Users");
         databaseReference = FirebaseDatabase.getInstance().getReference("Users");
 
-        String fullName = String.valueOf(name.getText()).trim();
-        String addr = String.valueOf(address.getText()).trim();
-        String st = String.valueOf(state.getText()).trim();
-        String nation = String.valueOf(nationality.getText()).trim();
-        int postalCode = Integer.parseInt(String.valueOf(postCode.getText()).trim());
-        int phone = Integer.parseInt(String.valueOf(phoneNumber.getText()).trim());
-        String man = String.valueOf(male.getText());
-        String woman = String.valueOf(female.getText());
-        String role = String.valueOf(roles.getText());
-        String bloodGroup = String.valueOf(bloodGroups.getText());
-        String genotype = String.valueOf(genotypes.getText());
-        String uid = mAuth.getUid();
-
         profilePic.setOnClickListener(v -> {
             Intent intent = new Intent().setAction(Intent.ACTION_GET_CONTENT).setType("image/*");
             startActivityForResult(intent, REQUEST_CODE);
@@ -123,11 +112,26 @@ public class CreateProfileActivity extends AppCompatActivity {
                             "." + getFileExtension(profilePicture));
                     uploadTask = reference.putFile(profilePicture)
                             .addOnSuccessListener(taskSnapshot -> {
-                                user = new User(reference.getDownloadUrl().toString(), fullName, addr,
-                                        st, nation, role,
-                                        genotype, bloodGroup, postalCode, phone);
+                                String fullName = String.valueOf(name.getText()).trim();
+                                String addr = String.valueOf(address.getText()).trim();
+                                String st = String.valueOf(state.getText()).trim();
+                                String nation = String.valueOf(nationality.getText()).trim();
+                                String postalCode = String.valueOf(postCode.getText()).trim();
+                                String phone = String.valueOf(phoneNumber.getText()).trim();
+
+                                String gender = male.isChecked() ? String.valueOf(male.getText()).trim() :
+                                        female.isChecked() ? String.valueOf(female.getText()).trim() : null;
+
+                                String role = String.valueOf(roles.getText());
+                                String bloodGroup = String.valueOf(bloodGroups.getText());
+                                String genotype = String.valueOf(genotypes.getText());
+                                String uid = mAuth.getUid();
+
+                                user = new User(String.valueOf(profilePicture), fullName, addr,
+                                        st, nation, role, genotype, bloodGroup, postalCode, phone, gender);
                                 String uploadID = databaseReference.push().getKey();
 
+                                assert uploadID != null;
                                 databaseReference.child(uploadID).setValue(user);
 
                                 Handler handler = new Handler();

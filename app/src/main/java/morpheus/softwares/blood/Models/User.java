@@ -1,13 +1,14 @@
 package morpheus.softwares.blood.Models;
 
 public class User {
-    private String profilePicture, name, address, state, nationality, role, genotype, bloodGroup;
-    private int postCode, phoneNumber;
+    private String profilePicture, name, address, state, nationality, role, genotype, bloodGroup,
+            gender, postCode, phoneNumber;
 
     public User() {
     }
 
-    public User(String profilePicture, String name, String address, String state, String nationality, String role, String genotype, String bloodGroup, int postCode, int phoneNumber) {
+    public User(String profilePicture, String name, String address, String state, String nationality,
+                String role, String genotype, String bloodGroup, String postCode, String phoneNumber, String gender) {
         this.profilePicture = profilePicture;
         this.name = name;
         this.address = address;
@@ -18,6 +19,7 @@ public class User {
         this.bloodGroup = bloodGroup;
         this.postCode = postCode;
         this.phoneNumber = phoneNumber;
+        this.gender = gender;
     }
 
     public String getProfilePicture() {
@@ -84,19 +86,27 @@ public class User {
         this.bloodGroup = bloodGroup;
     }
 
-    public int getPostCode() {
+    public String getPostCode() {
         return postCode;
     }
 
-    public void setPostCode(int postCode) {
+    public void setPostCode(String postCode) {
         this.postCode = postCode;
     }
 
-    public int getPhoneNumber() {
+    public String getPhoneNumber() {
         return phoneNumber;
     }
 
-    public void setPhoneNumber(int phoneNumber) {
+    public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
+    }
+
+    public String getGender() {
+        return gender;
+    }
+
+    public void setGender(String gender) {
+        this.gender = gender;
     }
 }
