@@ -25,13 +25,10 @@ import com.google.firebase.auth.FirebaseUser;
 import de.hdodenhof.circleimageview.CircleImageView;
 import morpheus.softwares.blood.R;
 
-public class SignUpActivity extends AppCompatActivity {
+public class SignInActivity extends AppCompatActivity {
     // Declare variables
-    private static final int REQUEST_CODE = 10;
-    private static final int GOOGLE_REQUEST_CODE = 30;
-    Uri profilePicture;
-    CircleImageView profilePic;
-    TextView email, password, confirmPassword, login;
+    private static final int GOOGLE_REQUEST_CODE = 10;
+    TextView email, password, confirmPassword;
     ProgressBar progressBar;
     Button signUp;
     CircleImageView google;
@@ -42,27 +39,20 @@ public class SignUpActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_sign_up);
+        setContentView(R.layout.activity_sign_in);
 
         // Returns an instance of this class corresponding to the default FirebaseApp instance.
         mAuth = FirebaseAuth.getInstance();
         signInOptions = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build();
-        signInClient = GoogleSignIn.getClient(SignUpActivity.this, signInOptions);
+        signInClient = GoogleSignIn.getClient(SignInActivity.this, signInOptions);
 
         // Initialize variables
-        profilePic = findViewById(R.id.signupProfilePic);
         email = findViewById(R.id.signupEmail);
         password = findViewById(R.id.password);
         confirmPassword = findViewById(R.id.signupConfirmPassword);
         progressBar = findViewById(R.id.signupProgressBar);
         signUp = findViewById(R.id.signupSignUp);
-        login = findViewById(R.id.signupLogIn);
         google = findViewById(R.id.signupGoogle);
-
-        profilePic.setOnClickListener(v -> {
-            Intent intent = new Intent().setAction(Intent.ACTION_GET_CONTENT).setType("image/*");
-            startActivityForResult(intent, REQUEST_CODE);
-        });
 
         signUp.setOnClickListener(v -> {
             progressBar.setVisibility(View.VISIBLE);
@@ -78,12 +68,12 @@ public class SignUpActivity extends AppCompatActivity {
                                 .addOnCompleteListener(task -> {
                                     progressBar.setVisibility(View.GONE);
                                     if (task.isSuccessful()) {
-                                        Toast.makeText(SignUpActivity.this, "Sign Up successful!", Toast.LENGTH_LONG).show();
-                                        startActivity(new Intent(SignUpActivity.this, LogInActivity.class));
+                                        Toast.makeText(SignInActivity.this, "Sign Up successful!", Toast.LENGTH_LONG).show();
+                                        startActivity(new Intent(SignInActivity.this, MainActivity.class));
                                         finish();
                                     } else {
                                         // If sign in fails, display a message to the user.
-                                        Toast.makeText(SignUpActivity.this, "Authentication failed.",
+                                        Toast.makeText(SignInActivity.this, "Authentication failed.",
                                                 Toast.LENGTH_LONG).show();
                                     }
                                 });
@@ -100,12 +90,6 @@ public class SignUpActivity extends AppCompatActivity {
             }
         });
 
-        login.setOnClickListener(v -> {
-            finish();
-            startActivity(new Intent(SignUpActivity.this, LogInActivity.class));
-        });
-
-
         google.setOnClickListener(v -> {
             Intent intent = signInClient.getSignInIntent();
             startActivityForResult(intent, GOOGLE_REQUEST_CODE);
@@ -116,13 +100,6 @@ public class SignUpActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (data != null) {
-            if (data.getData() != null) {
-                profilePicture = data.getData();
-                profilePic.setImageURI(profilePicture);
-            }
-        }
-
         if (requestCode == GOOGLE_REQUEST_CODE) {
             progressBar.setVisibility(View.VISIBLE);
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
@@ -130,10 +107,10 @@ public class SignUpActivity extends AppCompatActivity {
                 task.getResult(ApiException.class);
                 progressBar.setVisibility(View.GONE);
                 finish();
-                startActivity(new Intent(SignUpActivity.this, MainActivity.class));
+                startActivity(new Intent(SignInActivity.this, MainActivity.class));
             } catch (ApiException e) {
                 progressBar.setVisibility(View.GONE);
-                Toast.makeText(SignUpActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(SignInActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
                 throw new RuntimeException(e);
             }
         }
@@ -146,13 +123,13 @@ public class SignUpActivity extends AppCompatActivity {
         // If user is already signed in, jump to the MainActivity
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if (currentUser != null) {
-            startActivity(new Intent(SignUpActivity.this, MainActivity.class));
+            startActivity(new Intent(SignInActivity.this, MainActivity.class));
             finishAffinity();
         }
 
-        GoogleSignInAccount signInAccount = GoogleSignIn.getLastSignedInAccount(SignUpActivity.this);
+        GoogleSignInAccount signInAccount = GoogleSignIn.getLastSignedInAccount(SignInActivity.this);
         if (signInAccount != null) {
-            startActivity(new Intent(SignUpActivity.this, MainActivity.class));
+            startActivity(new Intent(SignInActivity.this, MainActivity.class));
             finishAffinity();
         }
     }

@@ -16,7 +16,7 @@
     <string name="log_in">Log In</string>
     <string name="appicon">appIcon</string>
     <string name="confirm_password">Confirm password</string>
-    <string name="sign_up">Sign Up</string>
+    <string name="sign_in">Sign In</string>
     <string name="registered">Already registered? Click here to Log In…</string>
     <string name="home">Home</string>
     <string name="search">Search…</string>

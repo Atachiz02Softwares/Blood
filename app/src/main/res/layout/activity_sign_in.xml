@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/signup"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="10dp"
-    android:id="@+id/login"
-    tools:context=".Activities.LogInActivity">
+    tools:context=".Activities.SignInActivity">
 
     <ImageView
-        android:id="@+id/loginIcon"
+        android:id="@+id/signInIcon"
         android:layout_width="176dp"
         android:layout_height="200dp"
         android:layout_centerHorizontal="true"
@@ -17,10 +17,10 @@
         android:src="@drawable/icon" />
 
     <TextView
-        android:id="@+id/loginTitle"
+        android:id="@+id/signInTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/loginIcon"
+        android:layout_below="@+id/signInIcon"
         android:layout_centerHorizontal="true"
         android:text="@string/blood_donor"
         android:textColor="#B40300"
@@ -28,11 +28,11 @@
         android:textStyle="bold" />
 
     <EditText
-        android:id="@+id/loginEmail"
+        android:id="@+id/signupEmail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/loginTitle"
-        android:layout_marginTop="50dp"
+        android:layout_below="@+id/signInTitle"
+        android:layout_marginTop="30dp"
         android:autofillHints="emailAddress"
         android:background="@drawable/textbox_outline"
         android:hint="@string/email"
@@ -41,10 +41,10 @@
         android:textSize="24sp" />
 
     <EditText
-        android:id="@+id/loginPassword"
+        android:id="@+id/password"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/loginEmail"
+        android:layout_below="@+id/signupEmail"
         android:layout_marginTop="10dp"
         android:autofillHints="password"
         android:background="@drawable/textbox_outline"
@@ -53,25 +53,48 @@
         android:padding="10dp"
         android:textSize="24sp" />
 
+    <EditText
+        android:id="@+id/signupConfirmPassword"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/password"
+        android:layout_marginTop="10dp"
+        android:autofillHints="password"
+        android:background="@drawable/textbox_outline"
+        android:hint="@string/confirm_password"
+        android:inputType="textPassword"
+        android:padding="10dp"
+        android:textSize="24sp" />
+
     <ProgressBar
-        android:id="@+id/loginProgressBar"
+        android:id="@+id/signupProgressBar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/loginPassword"
+        android:layout_below="@+id/signupConfirmPassword"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="10dp"
         android:visibility="gone" />
 
     <Button
-        android:id="@+id/loginLogin"
+        android:id="@+id/signupSignUp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/loginProgressBar"
+        android:layout_below="@id/signupProgressBar"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        android:backgroundTint="@color/red"
+        android:text="@string/sign_in"
+        android:textSize="24sp" />
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/signupGoogle"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_below="@+id/signupSignUp"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="20dp"
-        android:backgroundTint="@color/red"
-        android:text="@string/log_in"
-        android:textSize="24sp" />
+        android:elevation="10dp"
+        android:src="@drawable/google" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -79,7 +102,7 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:text="@string/atachiz02_softwares"
-        android:textColor="#FF0400"
+        android:textColor="#FF3D00"
         android:textSize="14sp"
         android:textStyle="italic" />
 

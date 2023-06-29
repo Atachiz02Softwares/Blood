@@ -30,7 +30,7 @@ public class SplashActivity extends AppCompatActivity {
 //                        .setInterpolator(new BounceInterpolator()).translationY(0));
 
         new Handler().postDelayed(() -> {
-            startActivity(new Intent(SplashActivity.this, SignUpActivity.class));
+            startActivity(new Intent(SplashActivity.this, SignInActivity.class));
             finish();
         }, TIMEOUT);
     }
