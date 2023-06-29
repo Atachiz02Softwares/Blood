@@ -19,10 +19,13 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.StorageTask;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import morpheus.softwares.blood.Models.Links;
@@ -34,7 +37,6 @@ public class CreateProfileActivity extends AppCompatActivity {
     private final String[] BLOODGROUPS = new Links().getBloodGroups();
     private final String[] GENOTYPES = new Links().getGenotypes();
     private final String[] ROLES = new Links().getRoles();
-    private User user;
     CircleImageView profilePic;
     Uri profilePicture;
     EditText name, address, state, nationality, postCode, phoneNumber;
@@ -48,9 +50,12 @@ public class CreateProfileActivity extends AppCompatActivity {
     RadioButton male, female;
     ProgressBar progressBar;
     Button createProfile;
-
     StorageReference storageReference;
     DatabaseReference databaseReference;
+    FirebaseAuth mAuth;
+    FirebaseUser firebaseUser;
+    StorageTask uploadTask;
+    private User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,6 +78,9 @@ public class CreateProfileActivity extends AppCompatActivity {
         progressBar = findViewById(R.id.createProfileProgressBar);
         createProfile = findViewById(R.id.createProfileCreateProfile);
 
+        mAuth = FirebaseAuth.getInstance();
+        firebaseUser = mAuth.getCurrentUser();
+
         roleAdapter = new ArrayAdapter<>(this, R.layout.list_items, ROLES);
         roles.setAdapter(roleAdapter);
 
@@ -82,7 +90,7 @@ public class CreateProfileActivity extends AppCompatActivity {
         genotypesAdapter = new ArrayAdapter<>(this, R.layout.list_items, GENOTYPES);
         genotypes.setAdapter(genotypesAdapter);
 
-        storageReference = FirebaseStorage.getInstance().getReference("Users/");
+        storageReference = FirebaseStorage.getInstance().getReference("Users");
         databaseReference = FirebaseDatabase.getInstance().getReference("Users");
 
         String fullName = String.valueOf(name.getText()).trim();
@@ -96,6 +104,7 @@ public class CreateProfileActivity extends AppCompatActivity {
         String role = String.valueOf(roles.getText());
         String bloodGroup = String.valueOf(bloodGroups.getText());
         String genotype = String.valueOf(genotypes.getText());
+        String uid = mAuth.getUid();
 
         profilePic.setOnClickListener(v -> {
             Intent intent = new Intent().setAction(Intent.ACTION_GET_CONTENT).setType("image/*");
@@ -103,32 +112,42 @@ public class CreateProfileActivity extends AppCompatActivity {
         });
 
         createProfile.setOnClickListener(v -> {
-            progressBar.setVisibility(View.VISIBLE);
-
-            if (profilePicture != null) {
-                StorageReference reference = storageReference.child(System.currentTimeMillis() +
-                        "." + getFileExtension(profilePicture));
-                reference.putFile(profilePicture)
-                        .addOnSuccessListener(taskSnapshot -> {
-//                            user = new User(name, TODO);
-
-                            Handler handler = new Handler();
-                            handler.postDelayed(() -> progressBar.setProgress(0), 5000); // 5 seconds post delay
-                            progressBar.setVisibility(View.GONE);
-                            Toast.makeText(CreateProfileActivity.this, "Profile created " +
-                                    "successfully!", Toast.LENGTH_LONG).show();
-                        }).addOnFailureListener(e -> {
-                            progressBar.setVisibility(View.GONE);
-                            Toast.makeText(CreateProfileActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
-                        }).addOnProgressListener(snapshot -> {
-                            double progress =
-                                    100.0 * snapshot.getBytesTransferred() / snapshot.getTotalByteCount();
-                            progressBar.setProgress((int) progress);
-                        });
-            } else {
-                progressBar.setVisibility(View.GONE);
-                Toast.makeText(CreateProfileActivity.this, "Please select a profile picture...",
+            if (uploadTask != null && uploadTask.isInProgress()) {
+                Toast.makeText(CreateProfileActivity.this, "Account creation in progress...",
                         Toast.LENGTH_SHORT).show();
+            } else {
+                progressBar.setVisibility(View.VISIBLE);
+
+                if (profilePicture != null) {
+                    StorageReference reference = storageReference.child(System.currentTimeMillis() +
+                            "." + getFileExtension(profilePicture));
+                    uploadTask = reference.putFile(profilePicture)
+                            .addOnSuccessListener(taskSnapshot -> {
+                                user = new User(reference.getDownloadUrl().toString(), fullName, addr,
+                                        st, nation, role,
+                                        genotype, bloodGroup, postalCode, phone);
+                                String uploadID = databaseReference.push().getKey();
+
+                                databaseReference.child(uploadID).setValue(user);
+
+                                Handler handler = new Handler();
+                                handler.postDelayed(() -> progressBar.setProgress(0), 500); // 0.5 seconds post delay
+                                progressBar.setVisibility(View.GONE);
+                                Toast.makeText(CreateProfileActivity.this, "Profile created " +
+                                        "successfully!", Toast.LENGTH_LONG).show();
+                            }).addOnFailureListener(e -> {
+                                progressBar.setVisibility(View.GONE);
+                                Toast.makeText(CreateProfileActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                            }).addOnProgressListener(snapshot -> {
+                                double progress =
+                                        100.0 * snapshot.getBytesTransferred() / snapshot.getTotalByteCount();
+                                progressBar.setProgress((int) progress);
+                            });
+                } else {
+                    progressBar.setVisibility(View.GONE);
+                    Toast.makeText(CreateProfileActivity.this, "Please select a profile picture...",
+                            Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }
