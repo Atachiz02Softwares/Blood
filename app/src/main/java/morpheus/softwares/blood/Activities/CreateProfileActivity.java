@@ -2,6 +2,7 @@ package morpheus.softwares.blood.Activities;
 
 import android.content.ContentResolver;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -78,6 +79,8 @@ public class CreateProfileActivity extends AppCompatActivity {
         progressBar = findViewById(R.id.createProfileProgressBar);
         createProfile = findViewById(R.id.createProfileCreateProfile);
 
+        checkProfileStatus(createProfile);
+
         mAuth = FirebaseAuth.getInstance();
         firebaseUser = mAuth.getCurrentUser();
 
@@ -137,6 +140,8 @@ public class CreateProfileActivity extends AppCompatActivity {
                                 progressBar.setVisibility(View.GONE);
                                 Toast.makeText(CreateProfileActivity.this, "Profile created " +
                                         "successfully!", Toast.LENGTH_LONG).show();
+
+                                setProfileStatus();
                                 createProfile.setEnabled(false);
                             }).addOnFailureListener(e -> {
                                 progressBar.setVisibility(View.GONE);
@@ -175,5 +180,28 @@ public class CreateProfileActivity extends AppCompatActivity {
         ContentResolver contentResolver = getContentResolver();
         MimeTypeMap mimeTypeMap = MimeTypeMap.getSingleton();
         return mimeTypeMap.getExtensionFromMimeType(contentResolver.getType(uri));
+    }
+
+    /**
+     * Saves the status of 'Create Profile' page to 'true' or 'false' whenever an account has been
+     * created.
+     */
+    private void setProfileStatus() {
+        SharedPreferences sharedPreferences = getSharedPreferences("profileStatus", MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+
+        editor.putBoolean("status", true);
+        editor.apply();
+    }
+
+    /**
+     * Checks the profile status of the device and enables the createProfile button or disables,
+     * depending on the saved status in the specified Shared Preferences.
+     */
+    private void checkProfileStatus(Button button) {
+        SharedPreferences sharedPreferences = getSharedPreferences("profileStatus", MODE_PRIVATE);
+
+        boolean status = sharedPreferences.getBoolean("status", false);
+        button.setEnabled(status);
     }
 }

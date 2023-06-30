@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="10dp"
+    app:cardCornerRadius="10dp"
+    app:cardElevation="5dp">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/mainProfilePic"
+            android:layout_width="100dp"
+            android:layout_height="110dp"
+            android:layout_margin="5dp"
+            android:src="@drawable/avatar"
+            app:civ_border_color="@color/red"
+            app:civ_border_width="1dp" />
+
+        <TextView
+            android:id="@+id/mainName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:text="Muhammad Ferrari"
+            android:layout_marginTop="5dp"
+            android:layout_toEndOf="@id/mainProfilePic"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/mainAddress"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/mainName"
+            android:text="Mayobelwa, Yola, AD"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="5dp"
+            android:layout_toEndOf="@id/mainProfilePic"
+            android:textSize="16sp"
+            android:textStyle="italic" />
+
+        <View
+            android:id="@+id/mainView"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_below="@id/mainAddress"
+            android:layout_margin="10dp"
+            android:layout_toEndOf="@id/mainProfilePic"
+            android:background="@color/green" />
+
+        <TextView
+            android:id="@+id/mainGender"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/mainView"
+            android:layout_marginStart="5dp"
+            android:text="Male"
+            android:layout_marginTop="10dp"
+            android:layout_toEndOf="@id/mainProfilePic"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/mainRole"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/mainView"
+            android:layout_marginStart="5dp"
+            android:text="Donor"
+            android:layout_marginTop="10dp"
+            android:layout_toEndOf="@id/mainGender"
+            android:textSize="16sp"
+            android:textStyle="italic" />
+
+        <TextView
+            android:id="@+id/mainBloodGroup"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/mainView"
+            android:text="0+"
+            android:layout_marginStart="5dp"
+            android:layout_toEndOf="@id/mainRole"
+            android:textColor="@color/green"
+            android:textSize="30sp"
+            android:textStyle="bold" />
+
+        <ImageView
+            android:id="@+id/mainCall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/mainView"
+            android:layout_margin="5dp"
+            android:layout_toStartOf="@id/mainChat"
+            android:contentDescription="Call"
+            android:src="@drawable/baseline_call_24" />
+
+        <ImageView
+            android:id="@+id/mainChat"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/mainView"
+            android:layout_alignParentEnd="true"
+            android:layout_margin="5dp"
+            android:contentDescription="Chat"
+            android:src="@drawable/baseline_chat_24" />
+    </RelativeLayout>
+</androidx.cardview.widget.CardView>

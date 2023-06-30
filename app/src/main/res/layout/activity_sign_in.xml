@@ -32,7 +32,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/signInTitle"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="50dp"
         android:autofillHints="emailAddress"
         android:background="@drawable/textbox_outline"
         android:hint="@string/email"
@@ -81,7 +81,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/signupProgressBar"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="20dp"
         android:backgroundTint="@color/red"
         android:text="@string/sign_in"
         android:textSize="24sp" />

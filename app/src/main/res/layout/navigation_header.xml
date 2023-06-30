@@ -33,30 +33,27 @@
         android:layout_marginStart="5dp"
         android:layout_marginTop="5dp"
         android:layout_toEndOf="@id/navProfilePic"
-        android:text="12 Nana Hostel, MAU"
         android:textSize="14sp"
         android:textStyle="italic" />
 
     <TextView
-        android:id="@+id/postCode"
+        android:id="@+id/navPostCode"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/navAddress"
         android:layout_marginStart="5dp"
         android:layout_marginTop="10dp"
         android:layout_toEndOf="@id/navProfilePic"
-        android:text="900101"
         android:textSize="12sp" />
 
     <TextView
-        android:id="@+id/nav"
+        android:id="@+id/navBloodGroup"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/navAddress"
-        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
         android:layout_marginStart="5dp"
         android:layout_marginTop="10dp"
-        android:text="O-"
         android:textColor="@color/green"
         android:textSize="30sp"
         android:textStyle="bold" />

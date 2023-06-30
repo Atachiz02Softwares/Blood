@@ -21,7 +21,7 @@
         app:civ_border_color="@color/red"
         app:civ_border_width="1dp" />
 
-    <com.google.android.material.card.MaterialCardView
+    <androidx.cardview.widget.CardView
         android:id="@+id/createProfileCardView"
         android:layout_width="match_parent"
         android:layout_height="400dp"
@@ -201,7 +201,7 @@
                 </RadioGroup>
             </RelativeLayout>
         </androidx.core.widget.NestedScrollView>
-    </com.google.android.material.card.MaterialCardView>
+    </androidx.cardview.widget.CardView>
 
     <ProgressBar
         android:id="@+id/createProfileProgressBar"
