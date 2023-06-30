@@ -38,11 +38,14 @@ public class CreateProfileActivity extends AppCompatActivity {
     private final String[] BLOODGROUPS = new Links().getBloodGroups();
     private final String[] GENOTYPES = new Links().getGenotypes();
     private final String[] ROLES = new Links().getRoles();
+    private final String[] STATES = new Links().getStates();
     CircleImageView profilePic;
     Uri profilePicture;
-    EditText name, address, state, nationality, postCode, phoneNumber;
+    EditText name, address, nationality, postCode, phoneNumber;
+    AutoCompleteTextView states;
+    ArrayAdapter<String> stateAdapter;
     AutoCompleteTextView roles;
-    ArrayAdapter<String> roleAdapter;
+    ArrayAdapter<String> rolesAdapter;
     AutoCompleteTextView bloodGroups;
     ArrayAdapter<String> bloodGroupsAdapter;
     AutoCompleteTextView genotypes;
@@ -66,7 +69,7 @@ public class CreateProfileActivity extends AppCompatActivity {
         profilePic = findViewById(R.id.createProfileProfilePic);
         name = findViewById(R.id.createProfileName);
         address = findViewById(R.id.createProfileAddress);
-        state = findViewById(R.id.createProfileState);
+        states = findViewById(R.id.createProfileState);
         nationality = findViewById(R.id.createProfileCountry);
         postCode = findViewById(R.id.createProfilePostCode);
         phoneNumber = findViewById(R.id.createProfilePhone);
@@ -84,8 +87,11 @@ public class CreateProfileActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         firebaseUser = mAuth.getCurrentUser();
 
-        roleAdapter = new ArrayAdapter<>(this, R.layout.list_items, ROLES);
-        roles.setAdapter(roleAdapter);
+        stateAdapter = new ArrayAdapter<>(this, R.layout.list_items, STATES);
+        states.setAdapter(stateAdapter);
+
+        rolesAdapter = new ArrayAdapter<>(this, R.layout.list_items, ROLES);
+        roles.setAdapter(rolesAdapter);
 
         bloodGroupsAdapter = new ArrayAdapter<>(this, R.layout.list_items, BLOODGROUPS);
         bloodGroups.setAdapter(bloodGroupsAdapter);
@@ -115,7 +121,6 @@ public class CreateProfileActivity extends AppCompatActivity {
                             .addOnSuccessListener(taskSnapshot -> {
                                 String fullName = String.valueOf(name.getText()).trim();
                                 String addr = String.valueOf(address.getText()).trim();
-                                String st = String.valueOf(state.getText()).trim();
                                 String nation = String.valueOf(nationality.getText()).trim();
                                 String postalCode = String.valueOf(postCode.getText()).trim();
                                 String phone = String.valueOf(phoneNumber.getText()).trim();
@@ -123,6 +128,7 @@ public class CreateProfileActivity extends AppCompatActivity {
                                 String gender = male.isChecked() ? String.valueOf(male.getText()).trim() :
                                         female.isChecked() ? String.valueOf(female.getText()).trim() : null;
 
+                                String st = String.valueOf(states.getText());
                                 String role = String.valueOf(roles.getText());
                                 String bloodGroup = String.valueOf(bloodGroups.getText());
                                 String genotype = String.valueOf(genotypes.getText());

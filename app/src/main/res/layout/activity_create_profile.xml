@@ -66,23 +66,10 @@
                     android:textSize="24sp" />
 
                 <EditText
-                    android:id="@+id/createProfileState"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/createProfileAddress"
-                    android:layout_marginTop="10dp"
-                    android:autofillHints="country"
-                    android:background="@drawable/textbox_outline"
-                    android:hint="@string/state"
-                    android:inputType="text"
-                    android:padding="10dp"
-                    android:textSize="24sp" />
-
-                <EditText
                     android:id="@+id/createProfileCountry"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/createProfileState"
+                    android:layout_below="@+id/createProfileAddress"
                     android:layout_marginTop="10dp"
                     android:autofillHints="country"
                     android:background="@drawable/textbox_outline"
@@ -120,11 +107,28 @@
                     android:textSize="24sp" />
 
                 <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/Role"
+                    android:id="@+id/State"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/createProfilePhone"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/textbox_outline"
+                    android:hint="@string/state">
+
+                    <AutoCompleteTextView
+                        android:id="@+id/createProfileState"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:inputType="none" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/Role"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/State"
                     android:layout_marginTop="10dp"
                     android:background="@drawable/textbox_outline"
                     android:hint="@string/roles">
