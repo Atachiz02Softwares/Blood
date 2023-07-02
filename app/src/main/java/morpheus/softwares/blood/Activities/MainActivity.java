@@ -1,5 +1,6 @@
 package morpheus.softwares.blood.Activities;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.inputmethod.EditorInfo;
@@ -81,6 +82,7 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setAdapter(userAdapter);
 
         database.getReference().child("Users").addValueEventListener(new ValueEventListener() {
+            @SuppressLint("NotifyDataSetChanged")
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 users.clear();
@@ -102,8 +104,14 @@ public class MainActivity extends AppCompatActivity {
         if (signInAccount != null) {
             String userName = String.valueOf(signInAccount.getDisplayName()).trim();
             String mail = String.valueOf(signInAccount.getEmail()).trim();
-            name.setText(userName);
-//            navigationName.setText(userName);
+
+            if (userName.equals("null") || userName.isEmpty()) {
+                name.setText(mail);
+                navigationName.setText(mail);
+            } else {
+                name.setText(userName);
+                navigationName.setText(userName);
+            }
             email.setText(mail);
         }
 
@@ -112,8 +120,14 @@ public class MainActivity extends AppCompatActivity {
         if (user != null) {
             String userName = String.valueOf(user.getDisplayName()).trim();
             String mail = String.valueOf(user.getEmail()).trim();
-            name.setText(userName);
-//            navigationName.setText(userName);
+
+            if (userName.equals("null") || userName.isEmpty()) {
+                name.setText(mail);
+                navigationName.setText(mail);
+            } else {
+                name.setText(userName);
+                navigationName.setText(userName);
+            }
             email.setText(mail);
         }
 

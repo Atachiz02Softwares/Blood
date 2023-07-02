@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.View;
 import android.webkit.MimeTypeMap;
 import android.widget.ArrayAdapter;
@@ -118,44 +117,44 @@ public class CreateProfileActivity extends AppCompatActivity {
                     StorageReference reference = storageReference.child(System.currentTimeMillis() +
                             "." + getFileExtension(profilePicture));
                     uploadTask = reference.putFile(profilePicture)
-                            .addOnSuccessListener(taskSnapshot -> {
-                                String fullName = String.valueOf(name.getText()).trim();
-                                String addr = String.valueOf(address.getText()).trim();
-                                String nation = String.valueOf(nationality.getText()).trim();
-                                String postalCode = String.valueOf(postCode.getText()).trim();
-                                String phone = String.valueOf(phoneNumber.getText()).trim();
+                            .addOnCompleteListener(task -> {
+                                if (task.isSuccessful()) {
+                                    reference.getDownloadUrl().addOnSuccessListener(uri -> {
+                                        String fullName = String.valueOf(name.getText()).trim();
+                                        String addr = String.valueOf(address.getText()).trim();
+                                        String nation = String.valueOf(nationality.getText()).trim();
+                                        String postalCode = String.valueOf(postCode.getText()).trim();
+                                        String phone = String.valueOf(phoneNumber.getText()).trim();
 
-                                String gender = male.isChecked() ? String.valueOf(male.getText()).trim() :
-                                        female.isChecked() ? String.valueOf(female.getText()).trim() : null;
+                                        String gender = male.isChecked() ? String.valueOf(male.getText()).trim() :
+                                                female.isChecked() ? String.valueOf(female.getText()).trim() : null;
 
-                                String st = String.valueOf(states.getText());
-                                String role = String.valueOf(roles.getText());
-                                String bloodGroup = String.valueOf(bloodGroups.getText());
-                                String genotype = String.valueOf(genotypes.getText());
-                                String uid = mAuth.getUid();
+                                        String st = String.valueOf(states.getText());
+                                        String role = String.valueOf(roles.getText());
+                                        String bloodGroup = String.valueOf(bloodGroups.getText());
+                                        String genotype = String.valueOf(genotypes.getText());
+                                        String uid = mAuth.getUid();
+                                        assert uid != null;
 
-                                user = new User(String.valueOf(profilePicture), fullName, addr,
-                                        st, nation, role, genotype, bloodGroup, postalCode, phone, gender);
-                                String uploadID = databaseReference.push().getKey();
+//                                        String uploadID = databaseReference.push().getKey();
+//                                        assert uploadID != null;
 
-                                assert uploadID != null;
-                                databaseReference.child(uploadID).setValue(user);
+                                        user = new User(String.valueOf(profilePicture), fullName, addr,
+                                                st, nation, role, genotype, bloodGroup, postalCode, phone, gender);
 
-                                Handler handler = new Handler();
-                                handler.postDelayed(() -> progressBar.setProgress(0), 500); // 0.5 seconds post delay
-                                progressBar.setVisibility(View.GONE);
-                                Toast.makeText(CreateProfileActivity.this, "Profile created " +
-                                        "successfully!", Toast.LENGTH_LONG).show();
+                                        databaseReference.child(uid).setValue(user).addOnSuccessListener(unused -> {
+                                            progressBar.setVisibility(View.GONE);
+                                            Toast.makeText(CreateProfileActivity.this, "Profile created " +
+                                                    "successfully!", Toast.LENGTH_LONG).show();
 
-                                setProfileStatus();
-                                createProfile.setEnabled(false);
-                            }).addOnFailureListener(e -> {
-                                progressBar.setVisibility(View.GONE);
-                                Toast.makeText(CreateProfileActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
-                            }).addOnProgressListener(snapshot -> {
-                                double progress =
-                                        100.0 * snapshot.getBytesTransferred() / snapshot.getTotalByteCount();
-                                progressBar.setProgress((int) progress);
+                                            setProfileStatus();
+                                            createProfile.setEnabled(false);
+                                        }).addOnFailureListener(e -> {
+                                            progressBar.setVisibility(View.GONE);
+                                            Toast.makeText(CreateProfileActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                                        });
+                                    });
+                                }
                             });
                 } else {
                     progressBar.setVisibility(View.GONE);
