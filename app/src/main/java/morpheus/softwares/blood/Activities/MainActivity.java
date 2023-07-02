@@ -123,10 +123,10 @@ public class MainActivity extends AppCompatActivity {
 
             if (userName.equals("null") || userName.isEmpty()) {
                 name.setText(mail);
-                navigationName.setText(mail);
+//                navigationName.setText(mail);
             } else {
                 name.setText(userName);
-                navigationName.setText(userName);
+//                navigationName.setText(userName);
             }
             email.setText(mail);
         }

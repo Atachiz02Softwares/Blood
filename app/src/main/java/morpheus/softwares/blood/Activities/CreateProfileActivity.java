@@ -81,7 +81,7 @@ public class CreateProfileActivity extends AppCompatActivity {
         progressBar = findViewById(R.id.createProfileProgressBar);
         createProfile = findViewById(R.id.createProfileCreateProfile);
 
-        checkProfileStatus(createProfile);
+//        checkProfileStatus(createProfile);
 
         mAuth = FirebaseAuth.getInstance();
         firebaseUser = mAuth.getCurrentUser();
