@@ -22,7 +22,7 @@
         android:layout_marginStart="5dp"
         android:layout_marginTop="20dp"
         android:layout_toEndOf="@id/navProfilePic"
-        android:textSize="20sp"
+        android:textSize="18sp"
         android:textStyle="bold" />
 
     <TextView

@@ -3,6 +3,7 @@ package morpheus.softwares.blood.Activities;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -17,6 +18,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.material.navigation.NavigationView;
@@ -29,16 +31,19 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
+import de.hdodenhof.circleimageview.CircleImageView;
 import morpheus.softwares.blood.Adapters.UserAdapter;
 import morpheus.softwares.blood.Models.User;
 import morpheus.softwares.blood.R;
 
 public class MainActivity extends AppCompatActivity {
-    TextView name, email, navigationName;
+    TextView name, email, navName, navPostCode, navAddress, navBloodGroup;
+    CircleImageView profilePicture, navProfilePicture;
     EditText search;
     DrawerLayout drawerLayout;
     NavigationView navigationView;
     ActionBarDrawerToggle actionBarDrawerToggle;
+    View header;
     Toolbar toolbar;
     FirebaseAuth mAuth;
     FirebaseUser user;
@@ -53,8 +58,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        profilePicture = findViewById(R.id.homeProfilePic);
         name = findViewById(R.id.homeName);
-        navigationName = findViewById(R.id.navName);
         email = findViewById(R.id.homeEmail);
         toolbar = findViewById(R.id.homeToolbar);
         search = findViewById(R.id.homeSearchView);
@@ -62,6 +67,15 @@ public class MainActivity extends AppCompatActivity {
         navigationView = findViewById(R.id.mainNavigator);
         actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar,
                 R.string.open, R.string.close);
+
+        // NavigationView items
+        header = navigationView.getHeaderView(0);
+        navProfilePicture = header.findViewById(R.id.navProfilePic);
+        navName = header.findViewById(R.id.navName);
+        navAddress = header.findViewById(R.id.navAddress);
+        navPostCode = header.findViewById(R.id.navPostCode);
+        navBloodGroup = header.findViewById(R.id.navBloodGroup);
+
         users = new ArrayList<>();
         recyclerView = findViewById(R.id.list);
         userAdapter = new UserAdapter(this, users);
@@ -90,6 +104,17 @@ public class MainActivity extends AppCompatActivity {
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
                     User user = dataSnapshot.getValue(User.class);
                     users.add(user);
+
+                    assert user != null;
+
+                    Glide.with(getApplicationContext()).load(user.getProfilePicture()).placeholder(R.drawable.avatar).into(profilePicture);
+                    Glide.with(getApplicationContext()).load(user.getProfilePicture()).placeholder(R.drawable.avatar).into(navProfilePicture);
+
+                    name.setText(user.getName());
+                    navName.setText(user.getName());
+                    navAddress.setText(user.getAddress());
+                    navPostCode.setText(user.getPostCode());
+                    navBloodGroup.setText(user.getBloodGroup());
                 }
                 userAdapter.notifyDataSetChanged();
             }
@@ -105,12 +130,15 @@ public class MainActivity extends AppCompatActivity {
             String userName = String.valueOf(signInAccount.getDisplayName()).trim();
             String mail = String.valueOf(signInAccount.getEmail()).trim();
 
+            Glide.with(getApplicationContext()).load(signInAccount.getPhotoUrl()).placeholder(R.drawable.avatar).into(profilePicture);
+            Glide.with(getApplicationContext()).load(signInAccount.getPhotoUrl()).placeholder(R.drawable.avatar).into(navProfilePicture);
+
             if (userName.equals("null") || userName.isEmpty()) {
                 name.setText(mail);
-                navigationName.setText(mail);
+                navName.setText(mail);
             } else {
                 name.setText(userName);
-                navigationName.setText(userName);
+                navName.setText(userName);
             }
             email.setText(mail);
         }
@@ -121,14 +149,16 @@ public class MainActivity extends AppCompatActivity {
             String userName = String.valueOf(user.getDisplayName()).trim();
             String mail = String.valueOf(user.getEmail()).trim();
 
+            Glide.with(getApplicationContext()).load(user.getPhotoUrl()).placeholder(R.drawable.avatar).into(profilePicture);
+            Glide.with(getApplicationContext()).load(user.getPhotoUrl()).placeholder(R.drawable.avatar).into(navProfilePicture);
+
             if (userName.equals("null") || userName.isEmpty()) {
-                name.setText(mail);
-//                navigationName.setText(mail);
+                navName.setText(mail);
             } else {
-                name.setText(userName);
-//                navigationName.setText(userName);
+                navName.setText(userName);
             }
-            email.setText(mail);
+            navAddress.setText(user.getPhoneNumber());
+
         }
 
         search.setOnEditorActionListener((v, actionId, event) -> {
