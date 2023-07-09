@@ -23,8 +23,8 @@
     <string name="search">Search…</string>
     <string name="todo">TODO</string>
     <string name="create_profile">Create Profile</string>
-    <string name="be_a_donor">Be a Donor</string>
-    <string name="find_donors">Find a Donor</string>
+    <string name="view_profile">View Profile</string>
+    <string name="about">About</string>
     <string name="exit">exit</string>
     <string name="open">open</string>
     <string name="close">close</string>
@@ -41,4 +41,5 @@
     <string name="blood_group">Your blood group</string>
     <string name="genotype">Your genotype</string>
     <string name="state">State</string>
+    <string name="contact">Contact</string>
 </resources>

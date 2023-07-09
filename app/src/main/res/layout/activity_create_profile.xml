@@ -114,7 +114,13 @@
                     android:layout_below="@+id/createProfilePhone"
                     android:layout_marginTop="10dp"
                     android:background="@drawable/textbox_outline"
-                    android:hint="@string/state">
+                    android:hint="@string/state"
+                    app:boxCornerRadiusBottomEnd="25dp"
+                    app:boxCornerRadiusBottomStart="25dp"
+                    app:boxCornerRadiusTopEnd="25dp"
+                    app:boxCornerRadiusTopStart="25dp"
+                    app:boxStrokeColor="@color/red"
+                    app:boxStrokeWidth="0dp">
 
                     <AutoCompleteTextView
                         android:id="@+id/createProfileState"
@@ -131,7 +137,13 @@
                     android:layout_below="@+id/State"
                     android:layout_marginTop="10dp"
                     android:background="@drawable/textbox_outline"
-                    android:hint="@string/roles">
+                    android:hint="@string/roles"
+                    app:boxCornerRadiusBottomEnd="25dp"
+                    app:boxCornerRadiusBottomStart="25dp"
+                    app:boxCornerRadiusTopEnd="25dp"
+                    app:boxCornerRadiusTopStart="25dp"
+                    app:boxStrokeColor="@color/red"
+                    app:boxStrokeWidth="0dp">
 
                     <AutoCompleteTextView
                         android:id="@+id/createProfileRole"
@@ -148,7 +160,13 @@
                     android:layout_below="@+id/Role"
                     android:layout_marginTop="10dp"
                     android:background="@drawable/textbox_outline"
-                    android:hint="@string/blood_group">
+                    android:hint="@string/blood_group"
+                    app:boxCornerRadiusBottomEnd="25dp"
+                    app:boxCornerRadiusBottomStart="25dp"
+                    app:boxCornerRadiusTopEnd="25dp"
+                    app:boxCornerRadiusTopStart="25dp"
+                    app:boxStrokeColor="@color/red"
+                    app:boxStrokeWidth="0dp">
 
                     <AutoCompleteTextView
                         android:id="@+id/createProfileBloodGroup"
@@ -165,7 +183,13 @@
                     android:layout_below="@+id/BloodGroup"
                     android:layout_marginTop="10dp"
                     android:background="@drawable/textbox_outline"
-                    android:hint="@string/genotype">
+                    android:hint="@string/genotype"
+                    app:boxCornerRadiusBottomEnd="25dp"
+                    app:boxCornerRadiusBottomStart="25dp"
+                    app:boxCornerRadiusTopEnd="25dp"
+                    app:boxCornerRadiusTopStart="25dp"
+                    app:boxStrokeColor="@color/red"
+                    app:boxStrokeWidth="0dp">
 
                     <AutoCompleteTextView
                         android:id="@+id/createProfileGenotype"

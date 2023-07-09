@@ -68,6 +68,11 @@ public class MainActivity extends AppCompatActivity {
         actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar,
                 R.string.open, R.string.close);
 
+        drawerLayout.addDrawerListener(actionBarDrawerToggle);
+        actionBarDrawerToggle.setDrawerSlideAnimationEnabled(true);
+        actionBarDrawerToggle.syncState();
+        setSupportActionBar(toolbar);
+
         // NavigationView items
         header = navigationView.getHeaderView(0);
         navProfilePicture = header.findViewById(R.id.navProfilePic);
@@ -79,12 +84,7 @@ public class MainActivity extends AppCompatActivity {
         users = new ArrayList<>();
         recyclerView = findViewById(R.id.list);
         userAdapter = new UserAdapter(this, users);
-
         recyclerView.setHasFixedSize(true);
-        drawerLayout.addDrawerListener(actionBarDrawerToggle);
-        actionBarDrawerToggle.setDrawerSlideAnimationEnabled(true);
-        actionBarDrawerToggle.syncState();
-        setSupportActionBar(toolbar);
 
         database = FirebaseDatabase.getInstance();
         mAuth = FirebaseAuth.getInstance();
@@ -175,10 +175,10 @@ public class MainActivity extends AppCompatActivity {
         navigationView.setNavigationItemSelectedListener(item -> {
             if (item.getItemId() == R.id.createProfile)
                 startActivity(new Intent(MainActivity.this, CreateProfileActivity.class));
-            else if (item.getItemId() == R.id.beADonor)
-                Toast.makeText(MainActivity.this, "Be a donor", Toast.LENGTH_SHORT).show();
-            else if (item.getItemId() == R.id.findDonor)
-                Toast.makeText(MainActivity.this, "Find a donor", Toast.LENGTH_SHORT).show();
+            else if (item.getItemId() == R.id.viewProfile)
+                startActivity(new Intent(MainActivity.this, ViewProfileActivity.class));
+            else if (item.getItemId() == R.id.about)
+                Toast.makeText(MainActivity.this, "About", Toast.LENGTH_SHORT).show();
             else if (item.getItemId() == R.id.exit) finishAffinity();
 
             drawerLayout.closeDrawer(GravityCompat.START);

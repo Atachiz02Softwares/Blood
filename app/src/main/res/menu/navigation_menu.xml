@@ -5,13 +5,13 @@
         android:icon="@drawable/baseline_account_circle_24"
         android:title="@string/create_profile" />
     <item
-        android:id="@+id/beADonor"
-        android:icon="@drawable/baseline_bloodtype_24"
-        android:title="@string/be_a_donor" />
+        android:id="@+id/viewProfile"
+        android:icon="@drawable/round_contact_page_24"
+        android:title="@string/view_profile" />
     <item
-        android:id="@+id/findDonor"
-        android:icon="@drawable/baseline_search_24"
-        android:title="@string/find_donors" />
+        android:id="@+id/about"
+        android:icon="@drawable/round_info_24"
+        android:title="@string/about" />
     <group>
         <item android:title="">
             <menu>
