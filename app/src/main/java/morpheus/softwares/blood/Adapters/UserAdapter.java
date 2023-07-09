@@ -1,6 +1,8 @@
 package morpheus.softwares.blood.Adapters;
 
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +17,7 @@ import com.bumptech.glide.Glide;
 import java.util.ArrayList;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import morpheus.softwares.blood.Activities.ViewProfileActivity;
 import morpheus.softwares.blood.Models.User;
 import morpheus.softwares.blood.R;
 
@@ -38,21 +41,52 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.Holder> {
     public void onBindViewHolder(@NonNull UserAdapter.Holder holder, int position) {
         User user = users.get(position);
 
-        holder.NAME.setText(user.getName());
-        holder.ADDRESS.setText(user.getAddress());
-        holder.GENDER.setText(user.getGender());
-        holder.ROLE.setText(user.getRole());
-        holder.BLOODGROUP.setText(user.getBloodGroup());
+        String profilePicture = user.getProfilePicture(),
+                name = user.getName(),
+                address = user.getAddress(),
+                state = user.getState(),
+                nationality = user.getNationality(),
+                role = user.getRole(),
+                genotype = user.getGenotype(),
+                bloodGroup = user.getBloodGroup(),
+                gender = user.getGender(),
+                postCode = user.getPostCode(),
+                phoneNumber = user.getPhoneNumber();
 
-        Glide.with(context).load(user.getProfilePicture()).placeholder(R.drawable.avatar).into(holder.PROFILEPICTURE);
+        holder.NAME.setText(name);
+        holder.ADDRESS.setText(address);
+        holder.GENDER.setText(gender);
+        holder.ROLE.setText(role);
+        holder.BLOODGROUP.setText(bloodGroup);
+
+        Glide.with(context).load(profilePicture).placeholder(R.drawable.avatar).into(holder.PROFILEPICTURE);
 
         holder.itemView.setOnClickListener(v -> {
+            Intent viewProfile = new Intent(context, ViewProfileActivity.class);
+            viewProfile.putExtra("profilePicture", profilePicture);
+            viewProfile.putExtra("name", name);
+            viewProfile.putExtra("address", address);
+            viewProfile.putExtra("state", state);
+            viewProfile.putExtra("nationality", nationality);
+            viewProfile.putExtra("role", role);
+            viewProfile.putExtra("genotype", genotype);
+            viewProfile.putExtra("bloodGroup", bloodGroup);
+            viewProfile.putExtra("gender", gender);
+            viewProfile.putExtra("postCode", postCode);
+            viewProfile.putExtra("phoneNumber", phoneNumber);
+            context.startActivity(viewProfile);
         });
 
         holder.CALL.setOnClickListener(v -> {
+            Intent call = new Intent(Intent.ACTION_DIAL);
+            call.setData(Uri.parse("tel:" + phoneNumber));
+            context.startActivity(call);
         });
 
         holder.CHAT.setOnClickListener(v -> {
+            Intent chat = new Intent(Intent.ACTION_SENDTO);
+            chat.setData(Uri.parse("smsto:" + phoneNumber));
+            context.startActivity(chat);
         });
     }
 

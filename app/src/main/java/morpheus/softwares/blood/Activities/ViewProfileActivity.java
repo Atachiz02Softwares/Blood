@@ -1,8 +1,11 @@
 package morpheus.softwares.blood.Activities;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -11,6 +14,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
+import com.bumptech.glide.Glide;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
@@ -22,6 +26,9 @@ public class ViewProfileActivity extends AppCompatActivity {
     DrawerLayout drawerLayout;
     NavigationView navigationView;
     ActionBarDrawerToggle actionBarDrawerToggle;
+
+    ImageView profilePic;
+    TextView fullName, location, bloodGrp, addr, zipCode, sex, status, gene;
 
     ExtendedFloatingActionButton extendedFab;
     FloatingActionButton callFab, chatFab;
@@ -35,6 +42,15 @@ public class ViewProfileActivity extends AppCompatActivity {
         toolbar = findViewById(R.id.viewProfileToolbar);
         drawerLayout = findViewById(R.id.viewProfileDrawer);
         navigationView = findViewById(R.id.viewProfileNavigator);
+        profilePic = findViewById(R.id.viewProfilePic);
+        fullName = findViewById(R.id.viewProfileName);
+        location = findViewById(R.id.viewProfileLocation);
+        bloodGrp = findViewById(R.id.viewProfileBloodGroup);
+        addr = findViewById(R.id.viewProfileAddress);
+        zipCode = findViewById(R.id.viewProfilePostalCode);
+        sex = findViewById(R.id.viewProfileGender);
+        status = findViewById(R.id.viewProfileRole);
+        gene = findViewById(R.id.viewProfileGenotype);
         extendedFab = findViewById(R.id.viewProfileFab);
         callFab = findViewById(R.id.viewProfileFabCall);
         chatFab = findViewById(R.id.viewProfileFabSMS);
@@ -46,6 +62,28 @@ public class ViewProfileActivity extends AppCompatActivity {
         actionBarDrawerToggle.setDrawerSlideAnimationEnabled(true);
         actionBarDrawerToggle.syncState();
         setSupportActionBar(toolbar);
+
+        String profilePicture = String.valueOf(getIntent().getStringExtra("profilePicture")),
+                name = String.valueOf(getIntent().getStringExtra("name")),
+                address = String.valueOf(getIntent().getStringExtra("address")),
+                state = String.valueOf(getIntent().getStringExtra("state")),
+                nationality = String.valueOf(getIntent().getStringExtra("nationality")),
+                role = String.valueOf(getIntent().getStringExtra("role")),
+                genotype = String.valueOf(getIntent().getStringExtra("genotype")),
+                bloodGroup = String.valueOf(getIntent().getStringExtra("bloodGroup")),
+                gender = String.valueOf(getIntent().getStringExtra("gender")),
+                postCode = String.valueOf(getIntent().getStringExtra("postCode")),
+                phoneNumber = String.valueOf(getIntent().getStringExtra("phoneNumber"));
+
+        Glide.with(ViewProfileActivity.this).load(profilePicture).placeholder(R.drawable.avatar).into(profilePic);
+        fullName.setText(name);
+        addr.setText(address);
+        location.setText(String.format("%s, %s", state, nationality));
+        status.setText(role);
+        gene.setText(genotype);
+        bloodGrp.setText(bloodGroup);
+        sex.setText(gender);
+        zipCode.setText(postCode);
 
         callFab.setVisibility(View.GONE);
         chatFab.setVisibility(View.GONE);
@@ -78,9 +116,16 @@ public class ViewProfileActivity extends AppCompatActivity {
             }
         });
 
-        callFab.setOnClickListener(v -> Toast.makeText(ViewProfileActivity.this, "Call",
-                Toast.LENGTH_SHORT).show());
-        chatFab.setOnClickListener(v -> Toast.makeText(ViewProfileActivity.this, "Chat",
-                Toast.LENGTH_SHORT).show());
+        callFab.setOnClickListener(v -> {
+            Intent call = new Intent(Intent.ACTION_DIAL);
+            call.setData(Uri.parse("tel:" + phoneNumber));
+            startActivity(call);
+        });
+
+        chatFab.setOnClickListener(v -> {
+            Intent chat = new Intent(Intent.ACTION_SENDTO);
+            chat.setData(Uri.parse("smsto:" + phoneNumber));
+            startActivity(chat);
+        });
     }
 }

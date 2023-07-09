@@ -52,7 +52,6 @@
             android:layout_marginEnd="5dp"
             android:layout_marginBottom="5dp"
             android:padding="10dp"
-            android:text="Boss Morpheus"
             android:textColor="@color/black"
             android:textSize="30sp"
             android:textStyle="bold" />
@@ -63,7 +62,6 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/viewProfileName"
             android:layout_centerHorizontal="true"
-            android:text="Adamawa, Nigeria"
             android:textColor="@color/black"
             android:textSize="18sp"
             android:textStyle="italic" />
@@ -75,7 +73,6 @@
             android:layout_below="@id/viewProfileName"
             android:layout_marginStart="25dp"
             android:layout_toEndOf="@id/viewProfileName"
-            android:text="0+"
             android:textColor="@color/green"
             android:textSize="24sp"
             android:textStyle="bold" />
@@ -109,7 +106,6 @@
             android:layout_marginTop="10dp"
             android:layout_marginEnd="10dp"
             android:layout_marginBottom="10dp"
-            android:text="Mau - Yola, Adamawa, Nigeria"
             android:textColor="@color/black"
             android:textSize="18sp"
             android:textStyle="bold" />
@@ -134,7 +130,6 @@
             android:layout_marginTop="10dp"
             android:layout_marginEnd="10dp"
             android:layout_marginBottom="10dp"
-            android:text="901101"
             android:textColor="@color/black"
             android:textSize="18sp"
             android:textStyle="bold" />
@@ -159,7 +154,6 @@
             android:layout_marginTop="10dp"
             android:layout_marginEnd="10dp"
             android:layout_marginBottom="10dp"
-            android:text="Male"
             android:textColor="@color/black"
             android:textSize="18sp"
             android:textStyle="bold" />
@@ -184,7 +178,6 @@
             android:layout_marginTop="10dp"
             android:layout_marginEnd="10dp"
             android:layout_marginBottom="10dp"
-            android:text="Donor"
             android:textColor="@color/black"
             android:textSize="18sp"
             android:textStyle="bold" />
@@ -196,7 +189,7 @@
             android:layout_below="@id/viewProfileRole"
             android:layout_marginStart="10dp"
             android:layout_marginTop="15dp"
-            android:text="Role:"
+            android:text="Genotype:"
             android:textColor="@color/black"
             android:textSize="16sp" />
 
@@ -209,7 +202,6 @@
             android:layout_marginTop="10dp"
             android:layout_marginEnd="10dp"
             android:layout_marginBottom="10dp"
-            android:text="AA"
             android:textColor="@color/black"
             android:textSize="18sp"
             android:textStyle="bold" />
