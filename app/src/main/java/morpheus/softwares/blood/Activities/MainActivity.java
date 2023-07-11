@@ -2,6 +2,7 @@ package morpheus.softwares.blood.Activities;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -95,7 +96,15 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setAdapter(userAdapter);
 
-        database.getReference().child("Users").addValueEventListener(new ValueEventListener() {
+        SharedPreferences sharedPreferences = getSharedPreferences("profileStatus", MODE_PRIVATE);
+        String role = sharedPreferences.getString("role", "");
+        if (role.equals("Donor"))
+            role = "Recipient";
+        else if (role.equals("Recipient"))
+            role = "Donor";
+        else role = "Blood Bank";
+
+        database.getReference().child("Users").child(role).addValueEventListener(new ValueEventListener() {
             @SuppressLint("NotifyDataSetChanged")
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {

@@ -15,6 +15,9 @@
         android:theme="@style/Theme.Blood"
         tools:targetApi="31">
         <activity
+            android:name=".Activities.LoginActivity"
+            android:exported="false" />
+        <activity
             android:name=".Activities.ViewProfileActivity"
             android:exported="false" />
         <activity

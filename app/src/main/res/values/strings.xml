@@ -13,11 +13,10 @@
     <string name="blood_donor">Blood Donor</string>
     <string name="email">Email</string>
     <string name="password">Password</string>
-    <string name="log_in">Log In</string>
     <string name="appicon">appIcon</string>
     <string name="confirm_password">Confirm password</string>
-    <string name="sign_in">Sign In</string>
-    <string name="registered">Already registered? Click here to Log In…</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="registered">Already registered? Click here to login…</string>
     <string name="home">Home</string>
     <string name="search">Search…</string>
     <string name="todo">TODO</string>
@@ -41,4 +40,5 @@
     <string name="genotype">Your genotype</string>
     <string name="state">State</string>
     <string name="contact">Contact</string>
+    <string name="login">Login</string>
 </resources>

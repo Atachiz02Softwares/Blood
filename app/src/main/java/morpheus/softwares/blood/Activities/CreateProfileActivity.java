@@ -114,7 +114,10 @@ public class CreateProfileActivity extends AppCompatActivity {
                 progressBar.setVisibility(View.VISIBLE);
 
                 if (profilePicture != null) {
-                    StorageReference reference = storageReference.child(System.currentTimeMillis() +
+                    String role = String.valueOf(roles.getText());
+
+                    StorageReference reference =
+                            storageReference.child(role).child(profilePicture.getLastPathSegment() +
                             "." + getFileExtension(profilePicture));
                     uploadTask = reference.putFile(profilePicture)
                             .addOnCompleteListener(task -> {
@@ -130,9 +133,9 @@ public class CreateProfileActivity extends AppCompatActivity {
                                                 female.isChecked() ? String.valueOf(female.getText()).trim() : null;
 
                                         String st = String.valueOf(states.getText());
-                                        String role = String.valueOf(roles.getText());
                                         String bloodGroup = String.valueOf(bloodGroups.getText());
                                         String genotype = String.valueOf(genotypes.getText());
+
                                         String uid = mAuth.getUid();
                                         assert uid != null;
 
@@ -142,12 +145,12 @@ public class CreateProfileActivity extends AppCompatActivity {
                                         user = new User(String.valueOf(profilePicture), fullName, addr,
                                                 st, nation, role, genotype, bloodGroup, postalCode, phone, gender);
 
-                                        databaseReference.child(uid).setValue(user).addOnSuccessListener(unused -> {
+                                        databaseReference.child(role).child(uid).setValue(user).addOnSuccessListener(unused -> {
                                             progressBar.setVisibility(View.GONE);
                                             Toast.makeText(CreateProfileActivity.this, "Profile created " +
                                                     "successfully!", Toast.LENGTH_LONG).show();
 
-                                            setProfileStatus();
+                                            setProfileStatus(role);
                                             createProfile.setEnabled(false);
                                         }).addOnFailureListener(e -> {
                                             progressBar.setVisibility(View.GONE);
@@ -191,11 +194,12 @@ public class CreateProfileActivity extends AppCompatActivity {
      * Saves the status of 'Create Profile' page to 'true' or 'false' whenever an account has been
      * created.
      */
-    private void setProfileStatus() {
+    private void setProfileStatus(String role) {
         SharedPreferences sharedPreferences = getSharedPreferences("profileStatus", MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
 
         editor.putBoolean("status", true);
+        editor.putString("role", role);
         editor.apply();
     }
 
