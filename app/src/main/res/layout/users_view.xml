@@ -66,6 +66,17 @@
             android:textStyle="bold" />
 
         <TextView
+            android:id="@+id/mainBloodGroup"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/mainAddress"
+            android:layout_margin="10dp"
+            android:layout_toEndOf="@id/mainProfilePic"
+            android:textColor="@color/green"
+            android:textSize="24sp"
+            android:textStyle="bold" />
+
+        <TextView
             android:id="@+id/mainRole"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -76,17 +87,6 @@
             android:layout_toEndOf="@id/mainGender"
             android:textSize="16sp"
             android:textStyle="italic" />
-
-        <TextView
-            android:id="@+id/mainBloodGroup"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/mainAddress"
-            android:layout_marginStart="10dp"
-            android:layout_toEndOf="@id/mainProfilePic"
-            android:textColor="@color/green"
-            android:textSize="30sp"
-            android:textStyle="bold" />
 
         <ImageView
             android:id="@+id/mainCall"

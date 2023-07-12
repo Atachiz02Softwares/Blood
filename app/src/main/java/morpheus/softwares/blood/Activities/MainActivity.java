@@ -97,7 +97,8 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setAdapter(userAdapter);
 
         SharedPreferences sharedPreferences = getSharedPreferences("profileStatus", MODE_PRIVATE);
-        String role = sharedPreferences.getString("role", "");
+        String role = sharedPreferences.getString("role", "Blood Bank");
+
         if (role.equals("Donor"))
             role = "Recipient";
         else if (role.equals("Recipient"))
