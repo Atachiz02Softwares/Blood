@@ -41,4 +41,11 @@
     <string name="state">State</string>
     <string name="contact">Contact</string>
     <string name="login">Login</string>
+    <string name="call">Call</string>
+    <string name="chat">Chat</string>
+    <string name="address">Address:</string>
+    <string name="post_code">Postal Code:</string>
+    <string name="gender">Gender:</string>
+    <string name="role">Role:</string>
+    <string name="genetype">Genotype:</string>
 </resources>

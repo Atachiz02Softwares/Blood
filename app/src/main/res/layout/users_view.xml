@@ -95,7 +95,7 @@
             android:layout_below="@id/mainView"
             android:layout_margin="5dp"
             android:layout_toStartOf="@id/mainChat"
-            android:contentDescription="Call"
+            android:contentDescription="@string/call"
             android:src="@drawable/baseline_call_24" />
 
         <ImageView
@@ -105,7 +105,7 @@
             android:layout_below="@id/mainView"
             android:layout_alignParentEnd="true"
             android:layout_margin="5dp"
-            android:contentDescription="Chat"
+            android:contentDescription="@string/chat"
             android:src="@drawable/baseline_chat_24" />
     </RelativeLayout>
 </androidx.cardview.widget.CardView>

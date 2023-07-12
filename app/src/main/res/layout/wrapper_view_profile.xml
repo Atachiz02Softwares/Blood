@@ -94,7 +94,7 @@
             android:layout_below="@id/view"
             android:layout_marginStart="10dp"
             android:layout_marginTop="15dp"
-            android:text="Address:"
+            android:text="@string/address"
             android:textColor="@color/black"
             android:textSize="16sp" />
 
@@ -118,7 +118,7 @@
             android:layout_below="@id/viewProfileAddress"
             android:layout_marginStart="10dp"
             android:layout_marginTop="15dp"
-            android:text="Postal Code:"
+            android:text="@string/post_code"
             android:textColor="@color/black"
             android:textSize="16sp" />
 
@@ -142,7 +142,7 @@
             android:layout_below="@id/viewProfilePostalCode"
             android:layout_marginStart="10dp"
             android:layout_marginTop="15dp"
-            android:text="Gender:"
+            android:text="@string/gender"
             android:textColor="@color/black"
             android:textSize="16sp" />
 
@@ -166,7 +166,7 @@
             android:layout_below="@id/viewProfileGender"
             android:layout_marginStart="10dp"
             android:layout_marginTop="15dp"
-            android:text="Role:"
+            android:text="@string/role"
             android:textColor="@color/black"
             android:textSize="16sp" />
 
@@ -190,7 +190,7 @@
             android:layout_below="@id/viewProfileRole"
             android:layout_marginStart="10dp"
             android:layout_marginTop="15dp"
-            android:text="Genotype:"
+            android:text="@string/genetype"
             android:textColor="@color/black"
             android:textSize="16sp" />
 
@@ -234,6 +234,7 @@
             android:layout_marginTop="18dp"
             android:layout_marginEnd="18dp"
             android:backgroundTint="@color/red"
+            android:contentDescription="@string/todo"
             android:src="@drawable/baseline_call_24"
             android:tintMode="@color/white"
             app:fabSize="normal" />
@@ -248,6 +249,7 @@
             android:layout_marginTop="18dp"
             android:layout_marginEnd="18dp"
             android:backgroundTint="@color/red"
+            android:contentDescription="@string/todo"
             android:src="@drawable/baseline_chat_24"
             android:tintMode="@color/white"
             app:fabSize="normal" />
