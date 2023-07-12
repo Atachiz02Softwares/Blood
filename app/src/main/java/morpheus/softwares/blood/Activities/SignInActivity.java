@@ -3,6 +3,7 @@ package morpheus.softwares.blood.Activities;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -10,6 +11,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
@@ -33,6 +35,7 @@ public class SignInActivity extends AppCompatActivity {
     GoogleSignInOptions signInOptions;
     GoogleSignInClient signInClient;
 
+    @RequiresApi(api = Build.VERSION_CODES.TIRAMISU)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -139,14 +142,14 @@ public class SignInActivity extends AppCompatActivity {
 //        }
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.TIRAMISU)
     private void setUpPermission() {
         if ((ActivityCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED)
                 || (ActivityCompat.checkSelfPermission(this, Manifest.permission.SEND_SMS) != PackageManager.PERMISSION_GRANTED)
                 || (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_MEDIA_IMAGES) != PackageManager.PERMISSION_GRANTED)
                 || (ActivityCompat.checkSelfPermission(this, Manifest.permission.INTERNET) != PackageManager.PERMISSION_GRANTED)) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CALL_PHONE}, 1);
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.SEND_SMS}, 1);
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.INTERNET}, 1);
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CALL_PHONE,
+                    Manifest.permission.SEND_SMS, Manifest.permission.READ_MEDIA_IMAGES, Manifest.permission.INTERNET}, 1);
         }
     }
 }

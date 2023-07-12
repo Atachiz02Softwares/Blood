@@ -2,7 +2,6 @@ package morpheus.softwares.blood.Activities;
 
 import android.content.ContentResolver;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
@@ -109,62 +108,52 @@ public class CreateProfileActivity extends AppCompatActivity {
         });
 
         createProfile.setOnClickListener(v -> {
-            if (uploadTask != null && uploadTask.isInProgress()) {
-                Toast.makeText(CreateProfileActivity.this, "Account creation in progress...",
-                        Toast.LENGTH_SHORT).show();
-            } else {
-                progressBar.setVisibility(View.VISIBLE);
+            progressBar.setVisibility(View.VISIBLE);
+            createProfile.setEnabled(false);
 
-                if (profilePicture != null) {
-                    String role = String.valueOf(roles.getText());
+            if (profilePicture != null) {
+                String uid = Objects.requireNonNull(mAuth.getCurrentUser()).getUid();
+                StorageReference reference = storageReference.child(uid);
+                reference.putFile(profilePicture)
+                        .addOnCompleteListener(task -> {
+                            if (task.isSuccessful()) {
+                                reference.getDownloadUrl().addOnSuccessListener(uri -> {
+                                    String fullName = String.valueOf(name.getText()).trim();
+                                    String addr = String.valueOf(address.getText()).trim();
+                                    String nation = String.valueOf(nationality.getText()).trim();
+                                    String postalCode = String.valueOf(postCode.getText()).trim();
+                                    String phone = String.valueOf(phoneNumber.getText()).trim();
 
-                    StorageReference reference =
-                            storageReference.child(role).child(profilePicture.getLastPathSegment() +
-                                    "." + getFileExtension(profilePicture));
-                    uploadTask = reference.putFile(profilePicture)
-                            .addOnCompleteListener(task -> {
-                                if (task.isSuccessful()) {
-                                    reference.getDownloadUrl().addOnSuccessListener(uri -> {
-                                        String fullName = String.valueOf(name.getText()).trim();
-                                        String addr = String.valueOf(address.getText()).trim();
-                                        String nation = String.valueOf(nationality.getText()).trim();
-                                        String postalCode = String.valueOf(postCode.getText()).trim();
-                                        String phone = String.valueOf(phoneNumber.getText()).trim();
+                                    String gender = male.isChecked() ? String.valueOf(male.getText()).trim() :
+                                            female.isChecked() ? String.valueOf(female.getText()).trim() : null;
 
-                                        String gender = male.isChecked() ? String.valueOf(male.getText()).trim() :
-                                                female.isChecked() ? String.valueOf(female.getText()).trim() : null;
-
-                                        String st = String.valueOf(states.getText());
-                                        String bloodGroup = String.valueOf(bloodGroups.getText());
-                                        String genotype = String.valueOf(genotypes.getText());
-
-                                        String uid = Objects.requireNonNull(mAuth.getCurrentUser()).getUid();
+                                    String st = String.valueOf(states.getText());
+                                    String bloodGroup = String.valueOf(bloodGroups.getText());
+                                    String role = String.valueOf(roles.getText());
+                                    String genotype = String.valueOf(genotypes.getText());
 
 //                                        String uploadID = databaseReference.push().getKey();
 //                                        assert uploadID != null;
 
-                                        user = new User(String.valueOf(profilePicture), fullName, addr,
-                                                st, nation, role, genotype, bloodGroup, postalCode, phone, gender);
+                                    user = new User(String.valueOf(profilePicture), fullName, addr,
+                                            st, nation, role, genotype, bloodGroup, postalCode, phone, gender);
 
-                                        databaseReference.child(role).child(uid).setValue(user).addOnSuccessListener(unused -> {
-                                            progressBar.setVisibility(View.GONE);
-                                            Toast.makeText(CreateProfileActivity.this, "Profile created " +
-                                                    "successfully!", Toast.LENGTH_LONG).show();
-
-                                            setProfileStatus(role);
-                                            createProfile.setEnabled(false);
-                                        }).addOnFailureListener(e -> {
-                                            progressBar.setVisibility(View.GONE);
-                                            Toast.makeText(CreateProfileActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
-                                        });
+                                    databaseReference.child(uid).setValue(user).addOnSuccessListener(unused -> {
+                                        progressBar.setVisibility(View.GONE);
+                                        Toast.makeText(CreateProfileActivity.this, "Profile created " +
+                                                "successfully!", Toast.LENGTH_LONG).show();
+                                        finish();
+                                    }).addOnFailureListener(e -> {
+                                        progressBar.setVisibility(View.GONE);
+                                        Toast.makeText(CreateProfileActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
                                     });
-                                }
-                            });
-                } else {
-                    progressBar.setVisibility(View.GONE);
-                    Toast.makeText(CreateProfileActivity.this, "Please select a profile picture...",
-                            Toast.LENGTH_SHORT).show();
-                }
+                                });
+                            }
+                        });
+            } else {
+                progressBar.setVisibility(View.GONE);
+                Toast.makeText(CreateProfileActivity.this, "Please select a profile picture...",
+                        Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -189,29 +178,5 @@ public class CreateProfileActivity extends AppCompatActivity {
         ContentResolver contentResolver = getContentResolver();
         MimeTypeMap mimeTypeMap = MimeTypeMap.getSingleton();
         return mimeTypeMap.getExtensionFromMimeType(contentResolver.getType(uri));
-    }
-
-    /**
-     * Saves the status of 'Create Profile' page to 'true' or 'false' whenever an account has been
-     * created.
-     */
-    private void setProfileStatus(String role) {
-        SharedPreferences sharedPreferences = getSharedPreferences("profileStatus", MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-
-        editor.putBoolean("status", true);
-        editor.putString("role", role);
-        editor.apply();
-    }
-
-    /**
-     * Checks the profile status of the device and enables the createProfile button or disables,
-     * depending on the saved status in the specified Shared Preferences.
-     */
-    private void checkProfileStatus(Button button) {
-        SharedPreferences sharedPreferences = getSharedPreferences("profileStatus", MODE_PRIVATE);
-
-        boolean status = sharedPreferences.getBoolean("status", false);
-        button.setEnabled(status);
     }
 }

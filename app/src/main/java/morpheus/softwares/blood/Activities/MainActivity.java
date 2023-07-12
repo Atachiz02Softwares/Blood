@@ -2,7 +2,6 @@ package morpheus.softwares.blood.Activities;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -94,16 +93,7 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setAdapter(userAdapter);
 
-        SharedPreferences sharedPreferences = getSharedPreferences("profileStatus", MODE_PRIVATE);
-        String role = sharedPreferences.getString("role", "Blood Bank");
-
-        if (role.equals("Donor"))
-            role = "Recipient";
-        else if (role.equals("Recipient"))
-            role = "Donor";
-        else role = "Blood Bank";
-
-        database.getReference().child("Users").child(role).addValueEventListener(new ValueEventListener() {
+        database.getReference().child("Users").addValueEventListener(new ValueEventListener() {
             @SuppressLint("NotifyDataSetChanged")
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -112,18 +102,8 @@ public class MainActivity extends AppCompatActivity {
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
                     User user = dataSnapshot.getValue(User.class);
                     users.add(user);
-
-                    assert user != null;
-
-                    Glide.with(getApplicationContext()).load(user.getProfilePicture()).placeholder(R.drawable.avatar).into(profilePicture);
-                    Glide.with(getApplicationContext()).load(user.getProfilePicture()).placeholder(R.drawable.avatar).into(navProfilePicture);
-
-                    name.setText(user.getName());
-                    navName.setText(user.getName());
-                    navAddress.setText(user.getAddress());
-                    navPostCode.setText(user.getPostCode());
-                    navBloodGroup.setText(user.getBloodGroup());
                 }
+
                 userAdapter.notifyDataSetChanged();
             }
 
@@ -157,7 +137,7 @@ public class MainActivity extends AppCompatActivity {
             String currentUserId = user.getUid();
             String mail = user.getEmail();
 
-            database.getReference().child("Users").child(role).child(currentUserId)
+            database.getReference().child("Users").child(currentUserId)
                     .addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -168,17 +148,22 @@ public class MainActivity extends AppCompatActivity {
                             if (user != null) {
                                 String userName = String.valueOf(user.getName()).trim();
 
-                                Glide.with(getApplicationContext()).load(user.getProfilePicture()).placeholder(R.drawable.avatar).into(profilePicture);
-                                Glide.with(getApplicationContext()).load(user.getProfilePicture()).placeholder(R.drawable.avatar).into(navProfilePicture);
+                                Glide.with(MainActivity.this).load(user.getProfilePicture()).placeholder(R.drawable.avatar).into(profilePicture);
+                                Glide.with(MainActivity.this).load(user.getProfilePicture()).placeholder(R.drawable.avatar).into(navProfilePicture);
 
                                 if (userName.equals("null") || userName.isEmpty()) {
                                     navName.setText("Create profile...");
                                 } else {
                                     navName.setText(userName);
                                 }
-                                
-                                navAddress.setText(user.getAddress());
+                                // Toolbar views
+                                name.setText(user.getName());
                                 email.setText(mail);
+                                // Navigation views
+                                navName.setText(user.getName());
+                                navAddress.setText(user.getAddress());
+                                navPostCode.setText(user.getPostCode());
+                                navBloodGroup.setText(user.getBloodGroup());
                             }
                         }
 
