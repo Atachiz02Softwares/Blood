@@ -1,6 +1,8 @@
 package morpheus.softwares.blood.Activities;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -9,6 +11,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -34,6 +37,8 @@ public class SignInActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_in);
+
+        setUpPermission();
 
         // Returns an instance of this class corresponding to the default FirebaseApp instance.
         mAuth = FirebaseAuth.getInstance();
@@ -72,10 +77,13 @@ public class SignInActivity extends AppCompatActivity {
                                                 Toast.LENGTH_LONG).show();
                                     }
                                 });
-                    else
+                    else {
+                        progressBar.setVisibility(View.GONE);
                         Snackbar.make(findViewById(R.id.signup), "Password must be more than 6 " +
                                 "characters...", Snackbar.LENGTH_LONG).show();
+                    }
                 } else {
+                    progressBar.setVisibility(View.GONE);
                     password.setError("Passwords don't match!");
                     confirmPassword.setError("Passwords don't match!");
                 }
@@ -129,5 +137,16 @@ public class SignInActivity extends AppCompatActivity {
 //            startActivity(new Intent(SignInActivity.this, MainActivity.class));
 //            finishAffinity();
 //        }
+    }
+
+    private void setUpPermission() {
+        if ((ActivityCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED)
+                || (ActivityCompat.checkSelfPermission(this, Manifest.permission.SEND_SMS) != PackageManager.PERMISSION_GRANTED)
+                || (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_MEDIA_IMAGES) != PackageManager.PERMISSION_GRANTED)
+                || (ActivityCompat.checkSelfPermission(this, Manifest.permission.INTERNET) != PackageManager.PERMISSION_GRANTED)) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CALL_PHONE}, 1);
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.SEND_SMS}, 1);
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.INTERNET}, 1);
+        }
     }
 }

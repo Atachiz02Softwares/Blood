@@ -27,6 +27,8 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.StorageTask;
 
+import java.util.Objects;
+
 import de.hdodenhof.circleimageview.CircleImageView;
 import morpheus.softwares.blood.Models.Links;
 import morpheus.softwares.blood.Models.User;
@@ -118,7 +120,7 @@ public class CreateProfileActivity extends AppCompatActivity {
 
                     StorageReference reference =
                             storageReference.child(role).child(profilePicture.getLastPathSegment() +
-                            "." + getFileExtension(profilePicture));
+                                    "." + getFileExtension(profilePicture));
                     uploadTask = reference.putFile(profilePicture)
                             .addOnCompleteListener(task -> {
                                 if (task.isSuccessful()) {
@@ -136,8 +138,7 @@ public class CreateProfileActivity extends AppCompatActivity {
                                         String bloodGroup = String.valueOf(bloodGroups.getText());
                                         String genotype = String.valueOf(genotypes.getText());
 
-                                        String uid = mAuth.getUid();
-                                        assert uid != null;
+                                        String uid = Objects.requireNonNull(mAuth.getCurrentUser()).getUid();
 
 //                                        String uploadID = databaseReference.push().getKey();
 //                                        assert uploadID != null;

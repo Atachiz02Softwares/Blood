@@ -20,8 +20,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.google.android.gms.auth.api.signin.GoogleSignIn;
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -135,40 +133,60 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        GoogleSignInAccount signInAccount = GoogleSignIn.getLastSignedInAccount(MainActivity.this);
-        if (signInAccount != null) {
-            String userName = String.valueOf(signInAccount.getDisplayName()).trim();
-            String mail = String.valueOf(signInAccount.getEmail()).trim();
-
-            Glide.with(getApplicationContext()).load(signInAccount.getPhotoUrl()).placeholder(R.drawable.avatar).into(profilePicture);
-            Glide.with(getApplicationContext()).load(signInAccount.getPhotoUrl()).placeholder(R.drawable.avatar).into(navProfilePicture);
-
-            if (userName.equals("null") || userName.isEmpty()) {
-                name.setText(mail);
-                navName.setText(mail);
-            } else {
-                name.setText(userName);
-                navName.setText(userName);
-            }
-            email.setText(mail);
-        }
+//        GoogleSignInAccount signInAccount = GoogleSignIn.getLastSignedInAccount(MainActivity.this);
+//        if (signInAccount != null) {
+//            String userName = String.valueOf(signInAccount.getDisplayName()).trim();
+//            String mail = String.valueOf(signInAccount.getEmail()).trim();
+//
+//            Glide.with(getApplicationContext()).load(signInAccount.getPhotoUrl()).placeholder(R.drawable.avatar).into(profilePicture);
+//            Glide.with(getApplicationContext()).load(signInAccount.getPhotoUrl()).placeholder(R.drawable.avatar).into(navProfilePicture);
+//
+//            if (userName.equals("null") || userName.isEmpty()) {
+//                name.setText(mail);
+//                navName.setText(mail);
+//            } else {
+//                name.setText(userName);
+//                navName.setText(userName);
+//            }
+//            email.setText(mail);
+//        }
 
         user = mAuth.getCurrentUser();
 
         if (user != null) {
-            String userName = String.valueOf(user.getDisplayName()).trim();
-            String mail = String.valueOf(user.getEmail()).trim();
+            String currentUserId = user.getUid();
+            String mail = user.getEmail();
 
-            Glide.with(getApplicationContext()).load(user.getPhotoUrl()).placeholder(R.drawable.avatar).into(profilePicture);
-            Glide.with(getApplicationContext()).load(user.getPhotoUrl()).placeholder(R.drawable.avatar).into(navProfilePicture);
+            database.getReference().child("Users").child(role).child(currentUserId)
+                    .addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            // Retrieve user data from the dataSnapshot
+                            User user = dataSnapshot.getValue(User.class);
 
-            if (userName.equals("null") || userName.isEmpty()) {
-                navName.setText(mail);
-            } else {
-                navName.setText(userName);
-            }
-            navAddress.setText(user.getPhoneNumber());
+                            // Update the UI with user data
+                            if (user != null) {
+                                String userName = String.valueOf(user.getName()).trim();
 
+                                Glide.with(getApplicationContext()).load(user.getProfilePicture()).placeholder(R.drawable.avatar).into(profilePicture);
+                                Glide.with(getApplicationContext()).load(user.getProfilePicture()).placeholder(R.drawable.avatar).into(navProfilePicture);
+
+                                if (userName.equals("null") || userName.isEmpty()) {
+                                    navName.setText("Create profile...");
+                                } else {
+                                    navName.setText(userName);
+                                }
+                                
+                                navAddress.setText(user.getAddress());
+                                email.setText(mail);
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+                            // Handle database error
+                        }
+                    });
         }
 
         search.setOnEditorActionListener((v, actionId, event) -> {

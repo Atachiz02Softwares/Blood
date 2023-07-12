@@ -75,7 +75,8 @@ public class ViewProfileActivity extends AppCompatActivity {
                 postCode = String.valueOf(getIntent().getStringExtra("postCode")),
                 phoneNumber = String.valueOf(getIntent().getStringExtra("phoneNumber"));
 
-        Glide.with(ViewProfileActivity.this).load(profilePicture).placeholder(R.drawable.avatar).into(profilePic);
+        Glide.with(ViewProfileActivity.this).load(Uri.parse(profilePicture)).placeholder(R.drawable.avatar).into(profilePic);
+//        profilePic.setImageURI(Uri.parse(profilePicture));
         fullName.setText(name);
         addr.setText(address);
         location.setText(String.format("%s, %s", state, nationality));
