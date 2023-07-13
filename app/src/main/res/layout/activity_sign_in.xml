@@ -22,7 +22,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/signInIcon"
         android:layout_centerHorizontal="true"
-        android:text="@string/blood_donor"
+        android:text="@string/blood"
         android:textColor="#B40300"
         android:textSize="50sp"
         android:textStyle="bold" />
