@@ -132,10 +132,7 @@ public class CreateProfileActivity extends AppCompatActivity {
                                     String role = String.valueOf(roles.getText());
                                     String genotype = String.valueOf(genotypes.getText());
 
-//                                        String uploadID = databaseReference.push().getKey();
-//                                        assert uploadID != null;
-
-                                    user = new User(String.valueOf(profilePicture), fullName, addr,
+                                    user = new User(String.valueOf(uri), fullName, addr,
                                             st, nation, role, genotype, bloodGroup, postalCode, phone, gender);
 
                                     databaseReference.child(uid).setValue(user).addOnSuccessListener(unused -> {
