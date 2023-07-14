@@ -19,6 +19,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.google.android.material.appbar.AppBarLayout;
+import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -35,6 +37,8 @@ import morpheus.softwares.blood.Models.User;
 import morpheus.softwares.blood.R;
 
 public class MainActivity extends AppCompatActivity {
+    AppBarLayout appBarLayout;
+    CollapsingToolbarLayout collapsingToolbarLayout;
     TextView name, email, navName, navPostCode, navAddress, navBloodGroup;
     CircleImageView profilePicture, navProfilePicture;
     EditText search;
@@ -56,10 +60,12 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        appBarLayout = findViewById(R.id.mainAppBar);
+        collapsingToolbarLayout = findViewById(R.id.mainCollapsingToolnar);
+        toolbar = findViewById(R.id.homeToolbar);
         profilePicture = findViewById(R.id.homeProfilePic);
         name = findViewById(R.id.homeName);
         email = findViewById(R.id.homeEmail);
-        toolbar = findViewById(R.id.homeToolbar);
         search = findViewById(R.id.homeSearchView);
         drawerLayout = findViewById(R.id.mainDrawer);
         navigationView = findViewById(R.id.mainNavigator);
@@ -69,7 +75,9 @@ public class MainActivity extends AppCompatActivity {
         drawerLayout.addDrawerListener(actionBarDrawerToggle);
         actionBarDrawerToggle.setDrawerSlideAnimationEnabled(true);
         actionBarDrawerToggle.syncState();
-        setSupportActionBar(toolbar);
+
+//        setSupportActionBar(toolbar);
+        collapsingToolbarLayout.setCollapsedTitleTextAppearance(R.style.CollapsedTitle);
 
         // NavigationView items
         header = navigationView.getHeaderView(0);
@@ -131,8 +139,6 @@ public class MainActivity extends AppCompatActivity {
 //            email.setText(mail);
 //        }
 
-        user = mAuth.getCurrentUser();
-
         if (user != null) {
             String currentUserId = user.getUid();
             String mail = user.getEmail();
@@ -157,8 +163,24 @@ public class MainActivity extends AppCompatActivity {
                                     navName.setText(userName);
                                 }
                                 // Toolbar views
-                                name.setText(user.getName());
+                                name.setText(userName);
                                 email.setText(mail);
+
+                                appBarLayout.addOnOffsetChangedListener((appBarLayout, verticalOffset) -> {
+                                    // Check if the collapsing toolbar is fully collapsed
+                                    if (Math.abs(verticalOffset) == appBarLayout.getTotalScrollRange()) {
+                                        // Collapsed state
+                                        name.setVisibility(View.GONE);
+                                        email.setVisibility(View.GONE);
+                                        collapsingToolbarLayout.setTitle(userName);
+                                    } else {
+                                        // Expanded state or in-between
+                                        name.setVisibility(View.VISIBLE);
+                                        email.setVisibility(View.VISIBLE);
+                                        collapsingToolbarLayout.setTitle("");
+                                    }
+                                });
+
                                 // Navigation views
                                 navName.setText(user.getName());
                                 navAddress.setText(user.getAddress());
@@ -188,9 +210,59 @@ public class MainActivity extends AppCompatActivity {
         navigationView.setNavigationItemSelectedListener(item -> {
             if (item.getItemId() == R.id.createProfile)
                 startActivity(new Intent(MainActivity.this, CreateProfileActivity.class));
-            else if (item.getItemId() == R.id.viewProfile)
-                startActivity(new Intent(MainActivity.this, ViewProfileActivity.class));
-            else if (item.getItemId() == R.id.about)
+            else if (item.getItemId() == R.id.viewProfile) {
+                if (user != null) {
+                    String currentUserId = user.getUid();
+                    String mail = user.getEmail();
+
+                    database.getReference().child("Users").child(currentUserId)
+                            .addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                    // Retrieve user data from the dataSnapshot
+                                    User user = dataSnapshot.getValue(User.class);
+
+                                    // Update the UI with user data
+                                    if (user != null) {
+                                        String profilePicture = user.getProfilePicture(),
+                                                name = user.getName(),
+                                                address = user.getAddress(),
+                                                state = user.getState(),
+                                                nationality = user.getNationality(),
+                                                role = user.getRole(),
+                                                genotype = user.getGenotype(),
+                                                bloodGroup = user.getBloodGroup(),
+                                                gender = user.getGender(),
+                                                postCode = user.getPostCode(),
+                                                phoneNumber = user.getPhoneNumber();
+
+                                        Intent viewProfile = new Intent(MainActivity.this,
+                                                ViewProfileActivity.class);
+                                        viewProfile.putExtra("profilePicture", profilePicture);
+                                        viewProfile.putExtra("name", name);
+                                        viewProfile.putExtra("address", address);
+                                        viewProfile.putExtra("state", state);
+                                        viewProfile.putExtra("nationality", nationality);
+                                        viewProfile.putExtra("role", role);
+                                        viewProfile.putExtra("genotype", genotype);
+                                        viewProfile.putExtra("bloodGroup", bloodGroup);
+                                        viewProfile.putExtra("gender", gender);
+                                        viewProfile.putExtra("postCode", postCode);
+                                        viewProfile.putExtra("phoneNumber", phoneNumber);
+                                        startActivity(viewProfile);
+                                    }
+                                }
+
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError databaseError) {
+                                    // Handle database error
+                                }
+                            });
+                } else {
+                    Toast.makeText(MainActivity.this, "Please, create a profile first...",
+                            Toast.LENGTH_SHORT).show();
+                }
+            } else if (item.getItemId() == R.id.about)
                 Toast.makeText(MainActivity.this, "About", Toast.LENGTH_SHORT).show();
             else if (item.getItemId() == R.id.exit) finishAffinity();
 

@@ -6,28 +6,22 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.view.GravityCompat;
-import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.bumptech.glide.Glide;
+import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.navigation.NavigationView;
 
 import morpheus.softwares.blood.R;
 
 public class ViewProfileActivity extends AppCompatActivity {
+    AppBarLayout appBarLayout;
     CollapsingToolbarLayout collapsingToolbarLayout;
     Toolbar toolbar;
-    DrawerLayout drawerLayout;
-    NavigationView navigationView;
-    ActionBarDrawerToggle actionBarDrawerToggle;
 
     ImageView profilePic;
     TextView fullName, location, bloodGrp, addr, zipCode, sex, status, gene;
@@ -41,10 +35,9 @@ public class ViewProfileActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_profile);
 
+        appBarLayout = findViewById(R.id.viewProfileAppBar);
         collapsingToolbarLayout = findViewById(R.id.viewProfileCollapsingToolbar);
         toolbar = findViewById(R.id.viewProfileToolbar);
-        drawerLayout = findViewById(R.id.viewProfileDrawer);
-        navigationView = findViewById(R.id.viewProfileNavigator);
         profilePic = findViewById(R.id.viewProfilePic);
         fullName = findViewById(R.id.viewProfileName);
         location = findViewById(R.id.viewProfileLocation);
@@ -59,12 +52,7 @@ public class ViewProfileActivity extends AppCompatActivity {
         chatFab = findViewById(R.id.viewProfileFabSMS);
         isAllFabsVisible = false;
 
-        actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar,
-                R.string.open, R.string.close);
-        drawerLayout.addDrawerListener(actionBarDrawerToggle);
-        actionBarDrawerToggle.setDrawerSlideAnimationEnabled(true);
-        actionBarDrawerToggle.syncState();
-        setSupportActionBar(toolbar);
+//        setSupportActionBar(toolbar);
         collapsingToolbarLayout.setCollapsedTitleTextAppearance(R.style.CollapsedTitle);
 
         String profilePicture = String.valueOf(getIntent().getStringExtra("profilePicture")),
@@ -79,7 +67,16 @@ public class ViewProfileActivity extends AppCompatActivity {
                 postCode = String.valueOf(getIntent().getStringExtra("postCode")),
                 phoneNumber = String.valueOf(getIntent().getStringExtra("phoneNumber"));
 
-        collapsingToolbarLayout.setTitle(name);
+        appBarLayout.addOnOffsetChangedListener((appBarLayout, verticalOffset) -> {
+            // Check if the collapsing toolbar is fully collapsed
+            if (Math.abs(verticalOffset) == appBarLayout.getTotalScrollRange()) {
+                // Collapsed state
+                collapsingToolbarLayout.setTitle(name);
+            } else {
+                // Expanded state or in-between
+                collapsingToolbarLayout.setTitle("");
+            }
+        });
 
         Glide.with(ViewProfileActivity.this).load(Uri.parse(profilePicture)).placeholder(R.drawable.avatar).into(profilePic);
         fullName.setText(name);
@@ -94,19 +91,6 @@ public class ViewProfileActivity extends AppCompatActivity {
         callFab.setVisibility(View.GONE);
         chatFab.setVisibility(View.GONE);
         extendedFab.shrink();
-
-        navigationView.setNavigationItemSelectedListener(item -> {
-            if (item.getItemId() == R.id.createProfile)
-                startActivity(new Intent(ViewProfileActivity.this, CreateProfileActivity.class));
-            else if (item.getItemId() == R.id.viewProfile)
-                Toast.makeText(ViewProfileActivity.this, "Innit", Toast.LENGTH_SHORT).show();
-            else if (item.getItemId() == R.id.about)
-                Toast.makeText(ViewProfileActivity.this, "About", Toast.LENGTH_SHORT).show();
-            else if (item.getItemId() == R.id.exit) finishAffinity();
-
-            drawerLayout.closeDrawer(GravityCompat.START);
-            return false;
-        });
 
         extendedFab.setOnClickListener(v -> {
             if (!isAllFabsVisible) {
