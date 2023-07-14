@@ -22,10 +22,10 @@
     <string name="todo">TODO</string>
     <string name="create_profile">Create Profile</string>
     <string name="view_profile">View Profile</string>
-    <string name="about">Abit</string>
-    <string name="open">opout</string>
-    <string name="exit">exen</string>
-    <string name="close">close</string>
+    <string name="about">About</string>
+    <string name="open">Open</string>
+    <string name="exit">Exit</string>
+    <string name="close">Close</string>
     <string name="nill"> </string>
     <string name="create">Create</string>
     <string name="your_name">Your name</string>
@@ -48,4 +48,6 @@
     <string name="gender">Gender:</string>
     <string name="role">Role:</string>
     <string name="genetype">Genotype:</string>
+    <string name="version">Version 1.0</string>
+    <string name="about_info">Blood is a revolutionary mobile app that seamlessly connects blood donors, recipients and blood banks, transforming the way we approach blood donation and reception. With user-friendly features such as donor registration, real-time database, geolocation services, secure communication channels, donation analytics, rewards, and educational resources, Blood streamlines the process, ensuring a reliable and efficient blood supply. Download and share Blood today and join the united community dedicated to saving lives through the power of mobile technology.</string>
 </resources>

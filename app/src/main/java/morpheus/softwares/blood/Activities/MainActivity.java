@@ -5,12 +5,14 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
@@ -21,6 +23,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -46,6 +49,9 @@ public class MainActivity extends AppCompatActivity {
     NavigationView navigationView;
     ActionBarDrawerToggle actionBarDrawerToggle;
     View header;
+    AlertDialog alertDialog;
+    MaterialAlertDialogBuilder builder;
+    Button aboutButton;
     Toolbar toolbar;
     FirebaseAuth mAuth;
     FirebaseUser user;
@@ -210,7 +216,7 @@ public class MainActivity extends AppCompatActivity {
         navigationView.setNavigationItemSelectedListener(item -> {
             if (item.getItemId() == R.id.createProfile)
                 startActivity(new Intent(MainActivity.this, CreateProfileActivity.class));
-            else if (item.getItemId() == R.id.viewProfile) {
+            else if (item.getItemId() == R.id.viewProfile)
                 if (user != null) {
                     String currentUserId = user.getUid();
                     String mail = user.getEmail();
@@ -262,9 +268,25 @@ public class MainActivity extends AppCompatActivity {
                     Toast.makeText(MainActivity.this, "Please, create a profile first...",
                             Toast.LENGTH_SHORT).show();
                 }
-            } else if (item.getItemId() == R.id.about)
-                Toast.makeText(MainActivity.this, "About", Toast.LENGTH_SHORT).show();
-            else if (item.getItemId() == R.id.exit) finishAffinity();
+            else if (item.getItemId() == R.id.about) {
+                builder = new MaterialAlertDialogBuilder(MainActivity.this,
+                        R.style.MaterialAlertDialogRounded);
+
+                // Inflate custom_dialog
+                View view = getLayoutInflater().inflate(R.layout.about_dialog, null);
+                aboutButton = view.findViewById(R.id.aboutButton);
+
+                // Close the AlertDialog on button click
+                aboutButton.setOnClickListener(v -> alertDialog.dismiss());
+
+                // Set view to dialog
+                builder.setView(view);
+
+                // Create dialog
+                alertDialog = builder.create();
+                alertDialog.setCanceledOnTouchOutside(false);
+                alertDialog.show();
+            } else if (item.getItemId() == R.id.exit) finishAffinity();
 
             drawerLayout.closeDrawer(GravityCompat.START);
             return false;
