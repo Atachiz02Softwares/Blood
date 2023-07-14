@@ -2,7 +2,7 @@
     <!-- Base application theme. -->
     <style name="Base.Theme.Blood" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your light theme here. -->
-         <item name="colorPrimary">@color/grey</item>
+        <item name="colorPrimary">@color/grey</item>
 
         <item name="android:fontFamily">sans-serif</item>
         <item name="android:textColor">@color/black</item>
@@ -10,10 +10,18 @@
 
     <style name="Theme.Blood" parent="Base.Theme.Blood" />
 
-    <!--    menu item text size-->
+    <!-- Menu item text size-->
     <style name="NavigationViewStyle">
         <item name="android:textSize">20sp</item>
         <item name="android:background">@color/white</item>
         <item name="android:textColor">@color/black</item>
     </style>
+
+    <!-- Collapsing Toolbar collapsed style-->
+    <style name="CollapsedTitle">
+        <item name="android:textColor">@color/green</item>
+        <item name="android:textSize">24sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
 </resources>

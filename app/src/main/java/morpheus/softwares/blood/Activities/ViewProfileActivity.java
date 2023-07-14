@@ -15,6 +15,7 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.bumptech.glide.Glide;
+import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
@@ -22,6 +23,7 @@ import com.google.android.material.navigation.NavigationView;
 import morpheus.softwares.blood.R;
 
 public class ViewProfileActivity extends AppCompatActivity {
+    CollapsingToolbarLayout collapsingToolbarLayout;
     Toolbar toolbar;
     DrawerLayout drawerLayout;
     NavigationView navigationView;
@@ -39,6 +41,7 @@ public class ViewProfileActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_profile);
 
+        collapsingToolbarLayout = findViewById(R.id.viewProfileCollapsingToolbar);
         toolbar = findViewById(R.id.viewProfileToolbar);
         drawerLayout = findViewById(R.id.viewProfileDrawer);
         navigationView = findViewById(R.id.viewProfileNavigator);
@@ -62,6 +65,7 @@ public class ViewProfileActivity extends AppCompatActivity {
         actionBarDrawerToggle.setDrawerSlideAnimationEnabled(true);
         actionBarDrawerToggle.syncState();
         setSupportActionBar(toolbar);
+        collapsingToolbarLayout.setCollapsedTitleTextAppearance(R.style.CollapsedTitle);
 
         String profilePicture = String.valueOf(getIntent().getStringExtra("profilePicture")),
                 name = String.valueOf(getIntent().getStringExtra("name")),
@@ -74,6 +78,8 @@ public class ViewProfileActivity extends AppCompatActivity {
                 gender = String.valueOf(getIntent().getStringExtra("gender")),
                 postCode = String.valueOf(getIntent().getStringExtra("postCode")),
                 phoneNumber = String.valueOf(getIntent().getStringExtra("phoneNumber"));
+
+        collapsingToolbarLayout.setTitle(name);
 
         Glide.with(ViewProfileActivity.this).load(Uri.parse(profilePicture)).placeholder(R.drawable.avatar).into(profilePic);
         fullName.setText(name);
