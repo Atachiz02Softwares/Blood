@@ -2,7 +2,7 @@ package morpheus.softwares.blood.Models;
 
 public class Links {
     String[] bloodGroups = {"A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-", "Blood Bank"};
-    String[] genotypes = {"AA", "AS", "AC", "SS", "SC", "aa", "Blood Bank"};
+    String[] genotypes = {"AA", "AS", "AC", "aa", "Blood Bank"};
     String[] roles = {"Donor", "Recipient", "Blood Bank"};
     String[] states = {"Abia", "Adamawa", "Akwa Ibom", "Anambra", "Bauchi", "Bayelsa", "Benue",
             "Borno", "Cross River", "Delta", "Ebonyi", "Edo", "Ekiti", "Enugu", "Gombe", "Imo",
