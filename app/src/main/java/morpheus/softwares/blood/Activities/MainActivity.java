@@ -57,7 +57,9 @@ public class MainActivity extends AppCompatActivity {
     FirebaseUser user;
     FirebaseDatabase database;
 
+    ArrayList<String> desiredRoles;
     ArrayList<User> users;
+    ArrayList<User> filteredUsers;
     UserAdapter userAdapter;
     RecyclerView recyclerView;
 
@@ -93,9 +95,11 @@ public class MainActivity extends AppCompatActivity {
         navPostCode = header.findViewById(R.id.navPostCode);
         navBloodGroup = header.findViewById(R.id.navBloodGroup);
 
+        desiredRoles = new ArrayList<>();
         users = new ArrayList<>();
+        filteredUsers = new ArrayList<>();
         recyclerView = findViewById(R.id.list);
-        userAdapter = new UserAdapter(this, users);
+        userAdapter = new UserAdapter(this, filteredUsers);
         recyclerView.setHasFixedSize(true);
 
         database = FirebaseDatabase.getInstance();
@@ -107,44 +111,7 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setAdapter(userAdapter);
 
-        database.getReference().child("Users").addValueEventListener(new ValueEventListener() {
-            @SuppressLint("NotifyDataSetChanged")
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                users.clear();
-
-                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
-                    User user = dataSnapshot.getValue(User.class);
-                    users.add(user);
-                }
-
-                userAdapter.notifyDataSetChanged();
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
-
-//        GoogleSignInAccount signInAccount = GoogleSignIn.getLastSignedInAccount(MainActivity.this);
-//        if (signInAccount != null) {
-//            String userName = String.valueOf(signInAccount.getDisplayName()).trim();
-//            String mail = String.valueOf(signInAccount.getEmail()).trim();
-//
-//            Glide.with(getApplicationContext()).load(signInAccount.getPhotoUrl()).placeholder(R.drawable.avatar).into(profilePicture);
-//            Glide.with(getApplicationContext()).load(signInAccount.getPhotoUrl()).placeholder(R.drawable.avatar).into(navProfilePicture);
-//
-//            if (userName.equals("null") || userName.isEmpty()) {
-//                name.setText(mail);
-//                navName.setText(mail);
-//            } else {
-//                name.setText(userName);
-//                navName.setText(userName);
-//            }
-//            email.setText(mail);
-//        }
-
+        // Load currently signed in user
         if (user != null) {
             String currentUserId = user.getUid();
             String mail = user.getEmail();
@@ -163,11 +130,8 @@ public class MainActivity extends AppCompatActivity {
                                 Glide.with(MainActivity.this).load(user.getProfilePicture()).placeholder(R.drawable.avatar).into(profilePicture);
                                 Glide.with(MainActivity.this).load(user.getProfilePicture()).placeholder(R.drawable.avatar).into(navProfilePicture);
 
-                                if (userName.equals("null") || userName.isEmpty()) {
-                                    navName.setText("Create profile...");
-                                } else {
-                                    navName.setText(userName);
-                                }
+                                // Navigation view
+                                navName.setText(userName);
                                 // Toolbar views
                                 name.setText(userName);
                                 email.setText(mail);
@@ -200,7 +164,47 @@ public class MainActivity extends AppCompatActivity {
                             // Handle database error
                         }
                     });
+        } else {
+            name.setText(R.string.create_profile);
+            navName.setText(R.string.create_profile);
         }
+
+        // Load Recycler view with users data
+        database.getReference().child("Users").addValueEventListener(new ValueEventListener() {
+            @SuppressLint("NotifyDataSetChanged")
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                users.clear();
+
+                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                    User user = dataSnapshot.getValue(User.class);
+                    users.add(user);
+                }
+
+                userAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+//        GoogleSignInAccount signInAccount = GoogleSignIn.getLastSignedInAccount(MainActivity.this);
+//        if (signInAccount != null) {
+//            String userName = String.valueOf(signInAccount.getDisplayName()).trim();
+//            String mail = String.valueOf(signInAccount.getEmail()).trim();
+//
+//            Glide.with(getApplicationContext()).load(signInAccount.getPhotoUrl()).placeholder(R.drawable.avatar).into(profilePicture);
+//            Glide.with(getApplicationContext()).load(signInAccount.getPhotoUrl()).placeholder(R.drawable.avatar).into(navProfilePicture);
+//
+//            name.setText(userName);
+//            navName.setText(userName);
+//            email.setText(mail);
+//        } else {
+//              name.setText(R.string.create_profile);
+//              navName.setText(R.string.create_profile);
+//        }
 
         search.setOnEditorActionListener((v, actionId, event) -> {
             boolean handled = false;
@@ -219,7 +223,6 @@ public class MainActivity extends AppCompatActivity {
             else if (item.getItemId() == R.id.viewProfile)
                 if (user != null) {
                     String currentUserId = user.getUid();
-                    String mail = user.getEmail();
 
                     database.getReference().child("Users").child(currentUserId)
                             .addListenerForSingleValueEvent(new ValueEventListener() {
