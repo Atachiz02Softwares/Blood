@@ -1,11 +1,9 @@
 package morpheus.softwares.blood.Activities;
 
-import android.content.ContentResolver;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
-import android.webkit.MimeTypeMap;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
@@ -24,7 +22,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.StorageTask;
 
 import java.util.Objects;
 
@@ -58,7 +55,6 @@ public class CreateProfileActivity extends AppCompatActivity {
     DatabaseReference databaseReference;
     FirebaseAuth mAuth;
     FirebaseUser firebaseUser;
-    StorageTask uploadTask;
     private User user;
 
     @Override
@@ -104,6 +100,7 @@ public class CreateProfileActivity extends AppCompatActivity {
 
         profilePic.setOnClickListener(v -> {
             Intent intent = new Intent().setAction(Intent.ACTION_GET_CONTENT).setType("image/*");
+            //noinspection deprecation
             startActivityForResult(intent, REQUEST_CODE);
         });
 
@@ -167,13 +164,13 @@ public class CreateProfileActivity extends AppCompatActivity {
         }
     }
 
-    /**
-     * Returns the registered extension for the given Uri. Note that some Uri(s) map to
-     * multiple extensions. This call will return the most common extension for the given Uri.
-     */
-    private String getFileExtension(Uri uri) {
-        ContentResolver contentResolver = getContentResolver();
-        MimeTypeMap mimeTypeMap = MimeTypeMap.getSingleton();
-        return mimeTypeMap.getExtensionFromMimeType(contentResolver.getType(uri));
-    }
+//    /**
+//     * Returns the registered extension for the given Uri. Note that some Uri(s) map to
+//     * multiple extensions. This call will return the most common extension for the given Uri.
+//     */
+//    private String getFileExtension(Uri uri) {
+//        ContentResolver contentResolver = getContentResolver();
+//        MimeTypeMap mimeTypeMap = MimeTypeMap.getSingleton();
+//        return mimeTypeMap.getExtensionFromMimeType(contentResolver.getType(uri));
+//    }
 }

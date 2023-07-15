@@ -57,9 +57,7 @@ public class MainActivity extends AppCompatActivity {
     FirebaseUser user;
     FirebaseDatabase database;
 
-    ArrayList<String> desiredRoles;
     ArrayList<User> users;
-    ArrayList<User> filteredUsers;
     UserAdapter userAdapter;
     RecyclerView recyclerView;
 
@@ -97,11 +95,9 @@ public class MainActivity extends AppCompatActivity {
         navPostCode = header.findViewById(R.id.navPostCode);
         navBloodGroup = header.findViewById(R.id.navBloodGroup);
 
-        desiredRoles = new ArrayList<>();
         users = new ArrayList<>();
-        filteredUsers = new ArrayList<>();
         recyclerView = findViewById(R.id.list);
-        userAdapter = new UserAdapter(this, filteredUsers);
+        userAdapter = new UserAdapter(this, users);
         recyclerView.setHasFixedSize(true);
 
         database = FirebaseDatabase.getInstance();
@@ -182,7 +178,10 @@ public class MainActivity extends AppCompatActivity {
 
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
                     User user = dataSnapshot.getValue(User.class);
-                    users.add(user);
+
+                    // Filter users to display with respect to current user's role...
+                    assert user != null;
+                    if (!currentUserRole.equals(user.getRole())) users.add(user);
                 }
 
                 userAdapter.notifyDataSetChanged();
