@@ -63,6 +63,8 @@ public class MainActivity extends AppCompatActivity {
     UserAdapter userAdapter;
     RecyclerView recyclerView;
 
+    String currentUserRole;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -125,6 +127,7 @@ public class MainActivity extends AppCompatActivity {
 
                             // Update the UI with user data
                             if (user != null) {
+                                currentUserRole = String.valueOf(user.getRole());
                                 String userName = String.valueOf(user.getName()).trim();
 
                                 Glide.with(MainActivity.this).load(user.getProfilePicture()).placeholder(R.drawable.avatar).into(profilePicture);
@@ -161,7 +164,8 @@ public class MainActivity extends AppCompatActivity {
 
                         @Override
                         public void onCancelled(@NonNull DatabaseError databaseError) {
-                            // Handle database error
+                            Toast.makeText(MainActivity.this, databaseError.getDetails(),
+                                    Toast.LENGTH_LONG).show();
                         }
                     });
         } else {
@@ -264,7 +268,8 @@ public class MainActivity extends AppCompatActivity {
 
                                 @Override
                                 public void onCancelled(@NonNull DatabaseError databaseError) {
-                                    // Handle database error
+                                    Toast.makeText(MainActivity.this, databaseError.getDetails(),
+                                            Toast.LENGTH_LONG).show();
                                 }
                             });
                 } else {
