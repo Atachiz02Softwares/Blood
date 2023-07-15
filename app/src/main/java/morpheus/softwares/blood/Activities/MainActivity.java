@@ -3,6 +3,7 @@ package morpheus.softwares.blood.Activities;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
@@ -36,6 +37,7 @@ import java.util.ArrayList;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import morpheus.softwares.blood.Adapters.UserAdapter;
+import morpheus.softwares.blood.Models.Links;
 import morpheus.softwares.blood.Models.User;
 import morpheus.softwares.blood.R;
 
@@ -56,6 +58,8 @@ public class MainActivity extends AppCompatActivity {
     FirebaseAuth mAuth;
     FirebaseUser user;
     FirebaseDatabase database;
+    String databaseReference;
+    String currentUserId;
 
     ArrayList<User> users;
     UserAdapter userAdapter;
@@ -103,18 +107,20 @@ public class MainActivity extends AppCompatActivity {
         database = FirebaseDatabase.getInstance();
         mAuth = FirebaseAuth.getInstance();
         user = mAuth.getCurrentUser();
+        databaseReference = new Links().getDatabaseReference();
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         linearLayoutManager.setOrientation(RecyclerView.VERTICAL);
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setAdapter(userAdapter);
 
+        currentUserId = user.getUid();
+
         // Load currently signed in user
         if (user != null) {
-            String currentUserId = user.getUid();
             String mail = user.getEmail();
 
-            database.getReference().child("Users").child(currentUserId)
+            database.getReference().child(databaseReference).child(currentUserId)
                     .addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -129,8 +135,12 @@ public class MainActivity extends AppCompatActivity {
                                 Glide.with(MainActivity.this).load(user.getProfilePicture()).placeholder(R.drawable.avatar).into(profilePicture);
                                 Glide.with(MainActivity.this).load(user.getProfilePicture()).placeholder(R.drawable.avatar).into(navProfilePicture);
 
-                                // Navigation view
+                                // Navigation views
                                 navName.setText(userName);
+                                navAddress.setText(user.getAddress());
+                                navPostCode.setText(user.getPostCode());
+                                navBloodGroup.setText(user.getBloodGroup());
+
                                 // Toolbar views
                                 name.setText(userName);
                                 email.setText(mail);
@@ -149,12 +159,6 @@ public class MainActivity extends AppCompatActivity {
                                         collapsingToolbarLayout.setTitle("");
                                     }
                                 });
-
-                                // Navigation views
-                                navName.setText(user.getName());
-                                navAddress.setText(user.getAddress());
-                                navPostCode.setText(user.getPostCode());
-                                navBloodGroup.setText(user.getBloodGroup());
                             }
                         }
 
@@ -170,7 +174,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         // Load Recycler view with users data
-        database.getReference().child("Users").addValueEventListener(new ValueEventListener() {
+        database.getReference().child(databaseReference).addValueEventListener(new ValueEventListener() {
             @SuppressLint("NotifyDataSetChanged")
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -181,7 +185,9 @@ public class MainActivity extends AppCompatActivity {
 
                     // Filter users to display with respect to current user's role...
                     assert user != null;
-                    if (!currentUserRole.equals(user.getRole())) users.add(user);
+                    if (!currentUserRole.equals(user.getRole()))
+                        users.add(user);
+                    else if (currentUserRole == null) users.add(user);
                 }
 
                 userAdapter.notifyDataSetChanged();
@@ -220,83 +226,92 @@ public class MainActivity extends AppCompatActivity {
             return handled;
         });
 
-        navigationView.setNavigationItemSelectedListener(item -> {
-            if (item.getItemId() == R.id.createProfile)
+        navigationView.setNavigationItemSelectedListener(this::onNavigationItemSelected);
+    }
+
+    /**
+     * onNavigationItemSelected extracted method reference
+     */
+    private boolean onNavigationItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.createProfile)
+            if (String.valueOf(name.getText()).isEmpty())
                 startActivity(new Intent(MainActivity.this, CreateProfileActivity.class));
-            else if (item.getItemId() == R.id.viewProfile)
-                if (user != null) {
-                    String currentUserId = user.getUid();
+            else
+                Toast.makeText(MainActivity.this, "Sorry! You can't create multiple accounts." +
+                        "..", Toast.LENGTH_SHORT).show();
+        else if (item.getItemId() == R.id.viewProfile)
+            if (user != null) {
+                String currentUserId = user.getUid();
 
-                    database.getReference().child("Users").child(currentUserId)
-                            .addListenerForSingleValueEvent(new ValueEventListener() {
-                                @Override
-                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                    // Retrieve user data from the dataSnapshot
-                                    User user = dataSnapshot.getValue(User.class);
+                database.getReference().child("Users").child(currentUserId)
+                        .addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                // Retrieve user data from the dataSnapshot
+                                User user = dataSnapshot.getValue(User.class);
 
-                                    // Update the UI with user data
-                                    if (user != null) {
-                                        String profilePicture = user.getProfilePicture(),
-                                                name = user.getName(),
-                                                address = user.getAddress(),
-                                                state = user.getState(),
-                                                nationality = user.getNationality(),
-                                                role = user.getRole(),
-                                                genotype = user.getGenotype(),
-                                                bloodGroup = user.getBloodGroup(),
-                                                gender = user.getGender(),
-                                                postCode = user.getPostCode(),
-                                                phoneNumber = user.getPhoneNumber();
+                                // Update the UI with user data
+                                if (user != null) {
+                                    String profilePicture = user.getProfilePicture(),
+                                            name = user.getName(),
+                                            address = user.getAddress(),
+                                            state = user.getState(),
+                                            nationality = user.getNationality(),
+                                            role = user.getRole(),
+                                            genotype = user.getGenotype(),
+                                            bloodGroup = user.getBloodGroup(),
+                                            gender = user.getGender(),
+                                            postCode = user.getPostCode(),
+                                            phoneNumber = user.getPhoneNumber();
 
-                                        Intent viewProfile = new Intent(MainActivity.this,
-                                                ViewProfileActivity.class);
-                                        viewProfile.putExtra("profilePicture", profilePicture);
-                                        viewProfile.putExtra("name", name);
-                                        viewProfile.putExtra("address", address);
-                                        viewProfile.putExtra("state", state);
-                                        viewProfile.putExtra("nationality", nationality);
-                                        viewProfile.putExtra("role", role);
-                                        viewProfile.putExtra("genotype", genotype);
-                                        viewProfile.putExtra("bloodGroup", bloodGroup);
-                                        viewProfile.putExtra("gender", gender);
-                                        viewProfile.putExtra("postCode", postCode);
-                                        viewProfile.putExtra("phoneNumber", phoneNumber);
-                                        startActivity(viewProfile);
-                                    }
+                                    Intent viewProfile = new Intent(MainActivity.this,
+                                            ViewProfileActivity.class);
+                                    viewProfile.putExtra("profilePicture", profilePicture);
+                                    viewProfile.putExtra("name", name);
+                                    viewProfile.putExtra("address", address);
+                                    viewProfile.putExtra("state", state);
+                                    viewProfile.putExtra("nationality", nationality);
+                                    viewProfile.putExtra("role", role);
+                                    viewProfile.putExtra("genotype", genotype);
+                                    viewProfile.putExtra("bloodGroup", bloodGroup);
+                                    viewProfile.putExtra("gender", gender);
+                                    viewProfile.putExtra("postCode", postCode);
+                                    viewProfile.putExtra("phoneNumber", phoneNumber);
+                                    startActivity(viewProfile);
                                 }
+                            }
 
-                                @Override
-                                public void onCancelled(@NonNull DatabaseError databaseError) {
-                                    Toast.makeText(MainActivity.this, databaseError.getDetails(),
-                                            Toast.LENGTH_LONG).show();
-                                }
-                            });
-                } else {
-                    Toast.makeText(MainActivity.this, "Please, create a profile first...",
-                            Toast.LENGTH_SHORT).show();
-                }
-            else if (item.getItemId() == R.id.about) {
-                builder = new MaterialAlertDialogBuilder(MainActivity.this,
-                        R.style.MaterialAlertDialogRounded);
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+                                Toast.makeText(MainActivity.this, databaseError.getDetails(),
+                                        Toast.LENGTH_LONG).show();
+                            }
+                        });
+            } else {
+                Toast.makeText(MainActivity.this, "Please, create a profile first...",
+                        Toast.LENGTH_SHORT).show();
+            }
+        else if (item.getItemId() == R.id.about) {
+            builder = new MaterialAlertDialogBuilder(MainActivity.this,
+                    R.style.MaterialAlertDialogRounded);
 
-                // Inflate custom_dialog
-                View view = getLayoutInflater().inflate(R.layout.about_dialog, null);
-                aboutButton = view.findViewById(R.id.aboutButton);
+            // Inflate custom_dialog
+            View view = getLayoutInflater().inflate(R.layout.about_dialog, null);
+            aboutButton = view.findViewById(R.id.aboutButton);
 
-                // Close the AlertDialog on button click
-                aboutButton.setOnClickListener(v -> alertDialog.dismiss());
+            // Close the AlertDialog on button click
+            aboutButton.setOnClickListener(v -> alertDialog.dismiss());
 
-                // Set view to dialog
-                builder.setView(view);
+            // Set view to dialog
+            builder.setView(view);
 
-                // Create dialog
-                alertDialog = builder.create();
-                alertDialog.setCanceledOnTouchOutside(false);
-                alertDialog.show();
-            } else if (item.getItemId() == R.id.exit) finishAffinity();
+            // Create dialog
+            alertDialog = builder.create();
+            alertDialog.setCanceledOnTouchOutside(false);
+            alertDialog.show();
+        } else if (item.getItemId() == R.id.exit) finishAffinity();
 
-            drawerLayout.closeDrawer(GravityCompat.START);
-            return false;
-        });
+        drawerLayout.closeDrawer(GravityCompat.START);
+        return false;
     }
 }

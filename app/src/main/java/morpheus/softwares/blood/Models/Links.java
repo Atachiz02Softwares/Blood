@@ -1,6 +1,7 @@
 package morpheus.softwares.blood.Models;
 
 public class Links {
+    String databaseReference = "Users";
     String[] bloodGroups = {"A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-", "Blood Bank"};
     String[] genotypes = {"AA", "AS", "AC", "Blood Bank"};
     String[] roles = {"Donor", "Recipient", "Blood Bank"};
@@ -11,6 +12,13 @@ public class Links {
             "Yobe", "Zamfara", "FCT"};
 
     public Links() {
+    }
+
+    /**
+     * Returns the database's immediate child reference
+     */
+    public String getDatabaseReference() {
+        return databaseReference;
     }
 
     /**
