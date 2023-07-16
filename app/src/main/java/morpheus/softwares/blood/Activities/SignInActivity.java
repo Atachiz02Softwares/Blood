@@ -16,12 +16,18 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import org.jetbrains.annotations.Nullable;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 import morpheus.softwares.blood.R;
 
 public class SignInActivity extends AppCompatActivity {
@@ -30,10 +36,10 @@ public class SignInActivity extends AppCompatActivity {
     TextView email, password, confirmPassword, login;
     ProgressBar progressBar;
     Button signUp;
-    //    CircleImageView google;
+//    CircleImageView google;
     FirebaseAuth mAuth;
-    GoogleSignInOptions signInOptions;
-    GoogleSignInClient signInClient;
+//    GoogleSignInOptions signInOptions;
+//    GoogleSignInClient signInClient;
 
     @RequiresApi(api = Build.VERSION_CODES.TIRAMISU)
     @Override
@@ -45,8 +51,8 @@ public class SignInActivity extends AppCompatActivity {
 
         // Returns an instance of this class corresponding to the default FirebaseApp instance.
         mAuth = FirebaseAuth.getInstance();
-        signInOptions = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build();
-        signInClient = GoogleSignIn.getClient(SignInActivity.this, signInOptions);
+//        signInOptions = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build();
+//        signInClient = GoogleSignIn.getClient(SignInActivity.this, signInOptions);
 
         // Initialize variables
         email = findViewById(R.id.signupEmail);
@@ -55,7 +61,7 @@ public class SignInActivity extends AppCompatActivity {
         progressBar = findViewById(R.id.signupProgressBar);
         signUp = findViewById(R.id.signupSignUp);
         login = findViewById(R.id.signupLogin);
-//        google = findViewById(R.id.signupGoogle);
+//        google = findViewById(R.id.signInGoogle);
 
         signUp.setOnClickListener(v -> {
             progressBar.setVisibility(View.VISIBLE);
@@ -91,38 +97,36 @@ public class SignInActivity extends AppCompatActivity {
                     confirmPassword.setError("Passwords don't match!");
                 }
             } else {
+                progressBar.setVisibility(View.GONE);
                 Snackbar.make(findViewById(R.id.signup), "No field should be empty...",
                         Snackbar.LENGTH_LONG).show();
             }
         });
 
-//        google.setOnClickListener(v -> {
-//            Intent intent = signInClient.getSignInIntent();
-//            startActivityForResult(intent, GOOGLE_REQUEST_CODE);
-//        });
+//        google.setOnClickListener(this::onClick);
 
         login.setOnClickListener(v -> startActivity(new Intent(SignInActivity.this, LoginActivity.class)));
     }
 
-//    @Override
-//    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-//        super.onActivityResult(requestCode, resultCode, data);
-//
-//        if (requestCode == GOOGLE_REQUEST_CODE) {
-//            progressBar.setVisibility(View.VISIBLE);
-//            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
-//            try {
-//                task.getResult(ApiException.class);
-//                progressBar.setVisibility(View.GONE);
-//                finish();
-//                startActivity(new Intent(SignInActivity.this, MainActivity.class));
-//            } catch (ApiException e) {
-//                progressBar.setVisibility(View.GONE);
-//                Toast.makeText(SignInActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
-//                throw new RuntimeException(e);
-//            }
-//        }
-//    }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == GOOGLE_REQUEST_CODE) {
+            progressBar.setVisibility(View.VISIBLE);
+            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
+            try {
+                task.getResult(ApiException.class);
+                progressBar.setVisibility(View.GONE);
+                finish();
+                startActivity(new Intent(SignInActivity.this, MainActivity.class));
+            } catch (ApiException e) {
+                progressBar.setVisibility(View.GONE);
+                Toast.makeText(SignInActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                throw new RuntimeException(e);
+            }
+        }
+    }
 
     @Override
     public void onStart() {
@@ -152,4 +156,10 @@ public class SignInActivity extends AppCompatActivity {
                     Manifest.permission.SEND_SMS, Manifest.permission.READ_MEDIA_IMAGES, Manifest.permission.INTERNET}, 1);
         }
     }
+
+//    @SuppressWarnings("deprecation")
+//    private void onClick(View v) {
+//        Intent intent = signInClient.getSignInIntent();
+//        startActivityForResult(intent, GOOGLE_REQUEST_CODE);
+//    }
 }

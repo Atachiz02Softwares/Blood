@@ -57,16 +57,14 @@
         android:id="@+id/loginProgressBar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/loginPassword"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="10dp"
+        android:layout_centerInParent="true"
         android:visibility="gone" />
 
     <Button
         android:id="@+id/loginLogin"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/loginProgressBar"
+        android:layout_below="@id/loginPassword"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="20dp"
         android:backgroundTint="@color/red"

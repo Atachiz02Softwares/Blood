@@ -185,9 +185,8 @@ public class MainActivity extends AppCompatActivity {
 
                     // Filter users to display with respect to current user's role...
                     assert user != null;
-                    if (!currentUserRole.equals(user.getRole()))
-                        users.add(user);
-                    else if (currentUserRole == null) users.add(user);
+                    if (!currentUserRole.equals(user.getRole())) users.add(user);
+                    else users.add(user);
                 }
 
                 userAdapter.notifyDataSetChanged();
