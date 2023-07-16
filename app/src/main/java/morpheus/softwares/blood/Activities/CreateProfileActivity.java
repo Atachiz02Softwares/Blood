@@ -136,6 +136,9 @@ public class CreateProfileActivity extends AppCompatActivity {
                                         progressBar.setVisibility(View.GONE);
                                         Toast.makeText(CreateProfileActivity.this, "Profile created " +
                                                 "successfully!", Toast.LENGTH_LONG).show();
+
+                                        startActivity(new Intent(CreateProfileActivity.this,
+                                                MainActivity.class).putExtra("tempName", fullName));
                                         finish();
                                     }).addOnFailureListener(e -> {
                                         progressBar.setVisibility(View.GONE);

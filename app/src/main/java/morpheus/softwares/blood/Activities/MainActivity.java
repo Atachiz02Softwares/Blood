@@ -114,6 +114,10 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setAdapter(userAdapter);
 
+        String tempName = String.valueOf(getIntent().getStringExtra("tempName"));
+        if (tempName.equals("null")) name.setText("");
+        else name.setText(tempName);
+
         currentUserId = user.getUid();
 
         // Load currently signed in user
@@ -159,12 +163,37 @@ public class MainActivity extends AppCompatActivity {
                                         collapsingToolbarLayout.setTitle("");
                                     }
                                 });
+
+                                // Load Recycler view with filtered users' data
+                                database.getReference().child(databaseReference).addValueEventListener(new ValueEventListener() {
+                                    @SuppressLint("NotifyDataSetChanged")
+                                    @Override
+                                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                        users.clear();
+
+                                        for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                                            User user = dataSnapshot.getValue(User.class);
+
+                                            // Filter users to display with respect to current user's role...
+                                            assert user != null;
+                                            if (!currentUserRole.equals(user.getRole()))
+                                                users.add(user);
+                                        }
+
+                                        userAdapter.notifyDataSetChanged();
+                                    }
+
+                                    @Override
+                                    public void onCancelled(@NonNull DatabaseError error) {
+                                        Toast.makeText(MainActivity.this, error.getMessage(), Toast.LENGTH_SHORT).show();
+                                    }
+                                });
                             }
                         }
 
                         @Override
                         public void onCancelled(@NonNull DatabaseError databaseError) {
-                            Toast.makeText(MainActivity.this, databaseError.getDetails(),
+                            Toast.makeText(MainActivity.this, databaseError.getMessage(),
                                     Toast.LENGTH_LONG).show();
                         }
                     });
@@ -172,31 +201,6 @@ public class MainActivity extends AppCompatActivity {
             name.setText(R.string.create_profile);
             navName.setText(R.string.create_profile);
         }
-
-        // Load Recycler view with users data
-        database.getReference().child(databaseReference).addValueEventListener(new ValueEventListener() {
-            @SuppressLint("NotifyDataSetChanged")
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                users.clear();
-
-                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
-                    User user = dataSnapshot.getValue(User.class);
-
-                    // Filter users to display with respect to current user's role...
-                    assert user != null;
-                    if (!currentUserRole.equals(user.getRole())) users.add(user);
-                    else users.add(user);
-                }
-
-                userAdapter.notifyDataSetChanged();
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                Toast.makeText(MainActivity.this, error.getMessage(), Toast.LENGTH_SHORT).show();
-            }
-        });
 
 //        GoogleSignInAccount signInAccount = GoogleSignIn.getLastSignedInAccount(MainActivity.this);
 //        if (signInAccount != null) {
@@ -233,7 +237,7 @@ public class MainActivity extends AppCompatActivity {
      */
     private boolean onNavigationItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.createProfile)
-            if (String.valueOf(name.getText()).isEmpty())
+            if (String.valueOf(name.getText()).isEmpty() || String.valueOf(name.getText()).equals("Create Profile"))
                 startActivity(new Intent(MainActivity.this, CreateProfileActivity.class));
             else
                 Toast.makeText(MainActivity.this, "Sorry! You can't create multiple accounts." +
