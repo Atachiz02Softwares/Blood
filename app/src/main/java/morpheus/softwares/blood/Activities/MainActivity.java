@@ -3,9 +3,10 @@ package morpheus.softwares.blood.Activities;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -218,15 +219,19 @@ public class MainActivity extends AppCompatActivity {
 //              navName.setText(R.string.create_profile);
 //        }
 
-        search.setOnEditorActionListener((v, actionId, event) -> {
-            boolean handled = false;
-            if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                Toast.makeText(MainActivity.this,
-                        "Searching for " + String.valueOf(search.getText()).trim() + "...",
-                        Toast.LENGTH_LONG).show();
-                handled = true;
+        search.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }
-            return handled;
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                filterUser(String.valueOf(s));
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
         });
 
         navigationView.setNavigationItemSelectedListener(this::onNavigationItemSelected);
@@ -316,5 +321,20 @@ public class MainActivity extends AppCompatActivity {
 
         drawerLayout.closeDrawer(GravityCompat.START);
         return false;
+    }
+
+    private void filterUser(String string) {
+        ArrayList<User> filteredUser = new ArrayList<>();
+
+        for (User user : users) {
+            if (user.getState().toLowerCase().contains(string.toLowerCase())) {
+                filteredUser.add(user);
+            }
+        }
+
+        if (filteredUser.isEmpty())
+            Toast.makeText(MainActivity.this, string + " not found...", Toast.LENGTH_SHORT).show();
+        else
+            userAdapter.filter(filteredUser);
     }
 }

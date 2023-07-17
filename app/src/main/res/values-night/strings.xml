@@ -19,7 +19,7 @@
     <string name="sign_up">Sign Up</string>
     <string name="registered">Already registered? Click here to login…</string>
     <string name="home">Home</string>
-    <string name="search">Search…</string>
+    <string name="search">Search by state…</string>
     <string name="todo">TODO</string>
     <string name="create_profile">Create Profile</string>
     <string name="view_profile">View Profile</string>

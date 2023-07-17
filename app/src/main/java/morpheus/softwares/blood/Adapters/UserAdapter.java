@@ -1,5 +1,6 @@
 package morpheus.softwares.blood.Adapters;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -93,6 +94,15 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.Holder> {
     @Override
     public int getItemCount() {
         return users.size();
+    }
+
+    /**
+     * Filter out searched word from list and display onTextChanged...
+     */
+    @SuppressLint("NotifyDataSetChanged")
+    public void filter(ArrayList<User> filteredUsers) {
+        this.users = filteredUsers;
+        notifyDataSetChanged();
     }
 
     public static class Holder extends RecyclerView.ViewHolder {
