@@ -26,8 +26,6 @@ public class SplashActivity extends AppCompatActivity {
         // Bounce animation of the App Icon
         appIcon.animate().setDuration(1000).setInterpolator(new BounceInterpolator())
                 .translationY(300);
-//                .withEndAction(() -> appIcon.animate().setDuration(500)
-//                        .setInterpolator(new BounceInterpolator()).translationY(0));
 
         new Handler().postDelayed(() -> {
             startActivity(new Intent(SplashActivity.this, SignInActivity.class));
