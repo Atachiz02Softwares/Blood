@@ -32,7 +32,7 @@ import morpheus.softwares.blood.R;
 
 public class SignInActivity extends AppCompatActivity {
     // Declare variables
-    private static final int GOOGLE_REQUEST_CODE = 10;
+//    private static final int GOOGLE_REQUEST_CODE = 10;
     TextView email, password, confirmPassword, login;
     ProgressBar progressBar;
     Button signUp;
