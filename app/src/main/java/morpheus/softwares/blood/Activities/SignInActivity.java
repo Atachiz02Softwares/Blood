@@ -108,25 +108,25 @@ public class SignInActivity extends AppCompatActivity {
         login.setOnClickListener(v -> startActivity(new Intent(SignInActivity.this, LoginActivity.class)));
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (requestCode == GOOGLE_REQUEST_CODE) {
-            progressBar.setVisibility(View.VISIBLE);
-            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
-            try {
-                task.getResult(ApiException.class);
-                progressBar.setVisibility(View.GONE);
-                finish();
-                startActivity(new Intent(SignInActivity.this, MainActivity.class));
-            } catch (ApiException e) {
-                progressBar.setVisibility(View.GONE);
-                Toast.makeText(SignInActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
-                throw new RuntimeException(e);
-            }
-        }
-    }
+//    @Override
+//    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+//        super.onActivityResult(requestCode, resultCode, data);
+//
+//        if (requestCode == GOOGLE_REQUEST_CODE) {
+//            progressBar.setVisibility(View.VISIBLE);
+//            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
+//            try {
+//                task.getResult(ApiException.class);
+//                progressBar.setVisibility(View.GONE);
+//                finish();
+//                startActivity(new Intent(SignInActivity.this, MainActivity.class));
+//            } catch (ApiException e) {
+//                progressBar.setVisibility(View.GONE);
+//                Toast.makeText(SignInActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+//                throw new RuntimeException(e);
+//            }
+//        }
+//    }
 
     @Override
     public void onStart() {
