@@ -248,7 +248,7 @@
             android:contentDescription="@string/todo"
             android:src="@drawable/baseline_call_24"
             app:fabSize="normal"
-            app:iconTint="@color/white" />
+            app:tint="@color/white" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/viewProfileFabSMS"
@@ -264,7 +264,7 @@
             android:contentDescription="@string/todo"
             android:src="@drawable/baseline_chat_24"
             app:fabSize="normal"
-            app:iconTint="@color/white" />
+            app:tint="@color/white" />
 
     </RelativeLayout>
 
